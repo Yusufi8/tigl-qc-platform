@@ -4,10 +4,17 @@
   "private": true,
   "type": "module",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "apps/*"
   ],
   "scripts": {
     "preview": "node scripts/preview-server.mjs",
+    "api": "node apps/api/src/server.mjs",
+    "web": "npm --workspace @tigl-qc/web run dev",
+    "db:migrate": "node database/migrate.mjs",
+    "db:seed": "node database/seed-axis.mjs",
+    "db:bootstrap-admin": "node database/bootstrap-admin.mjs",
+    "db:audit:verify": "node database/verify-audit.mjs",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "test:engine": "vitest run packages/engine/test"
@@ -20,5 +27,18 @@
   "engines": {
     "node": ">=22 <25",
     "npm": ">=10"
+  },
+  "dependencies": {
+    "@nestjs/common": "^12.1.2",
+    "@nestjs/core": "^12.1.2",
+    "@nestjs/platform-express": "^12.1.2",
+    "argon2": "^0.45.1",
+    "express": "^5.2.1",
+    "next": "^15.5.27",
+    "pg": "^8.23.1",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2"
   }
 }

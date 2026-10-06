@@ -7,6 +7,8 @@ permissions:
 jobs:
   quality:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgres://qc:qc_test_password@localhost:5432/tigl_qc_test
     services:
       postgres:
         image: postgres:16
@@ -28,9 +30,17 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Apply managed PostgreSQL 16 migrations and AXIS seed
+        env:
+          AUDIT_HMAC_SECRET: ci-only-test-key-please-use-a-random-production-key
+          BOOTSTRAP_USERNAME: qc.admin
+          BOOTSTRAP_PASSWORD: ci-only-password-longer-than-12
+          BOOTSTRAP_SITE_NAME: CI Factory
+        run: |
+          npm run db:migrate
+          npm run db:seed
+          npm run db:bootstrap-admin
+          npm run db:audit:verify
       - run: npm test
       - run: npm run typecheck
-      - name: Apply the PostgreSQL 16 schema
-        env:
-          PGPASSWORD: qc_test_password
-        run: psql -h localhost -U qc -d tigl_qc_test -v ON_ERROR_STOP=1 -f TIGL-QC-Dev-Packet/db/schema.sql
+      - run: npm run build --workspace @tigl-qc/web
