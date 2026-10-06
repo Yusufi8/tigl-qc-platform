@@ -21,8 +21,8 @@ Completed. See [`audit/phase-0-project-audit.md`](audit/phase-0-project-audit.md
 - Unit tests: 26 passed.
 - TypeScript: `tsc --noEmit` passed.
 - Static foreign-key creation-order scan: all 37 tables checked, no forward or missing references.
-- Added a PostgreSQL 16 service to CI and a clean schema application step. The workflow cannot be observed until the branch is published and CI runs.
-- Local PostgreSQL execution remains unverified in this environment because the local server requires credentials and Docker is unavailable.
+- GitHub Actions run [37424871869](https://github.com/Yusufi8/tigl-qc-platform/actions/runs/37424871869) completed successfully on the published feature branch: `npm ci`, all 26 tests, TypeScript checking, and clean PostgreSQL 16 schema application passed.
+- Local PostgreSQL execution remains unavailable in this environment; the CI PostgreSQL 16 result is the authoritative schema execution check.
 
 ## Not implemented yet
 
