@@ -6,7 +6,7 @@ Company-owned, self-hosted QC digitalization platform for T&I Projects Private L
 
 This repository is moving from handoff packet to implementation. The original specifications and prototype are preserved in [`TIGL-QC-Dev-Packet/`](TIGL-QC-Dev-Packet/). Phase 0 findings are in [`docs/audit/phase-0-project-audit.md`](docs/audit/phase-0-project-audit.md).
 
-The first pushed implementation slice is `packages/engine`: deterministic parameter evaluation and result aggregation, with AXIS seed contract checks. This is not yet a deployable application. There is no production API, user authentication, inspection UI, signature service, or Odoo adapter in this release.
+The repository contains `packages/engine`, a deterministic parameter evaluator, and a clickable browser prototype based on the handoff packet. The prototype is useful for reviewing workflows and UX; it stores demo data in browser local storage and is not a production application. There is no production API, authentication service, signature service, or Odoo adapter yet.
 
 ## Development
 
@@ -14,9 +14,12 @@ Requirements: Node.js 22 or later (up to 24), npm 10 or later.
 
 ```sh
 npm ci
+npm run preview
 npm test
 npm run typecheck
 ```
+
+Open [http://127.0.0.1:4173](http://127.0.0.1:4173) for the local preview. Demo user switching is available in the header. Use “Reset demo data” in the sidebar to restore the sample dataset.
 
 The engine is designed as a pure shared TypeScript package. The browser may use it for immediate feedback; an eventual API must call it again and own the authoritative result. Never accept a client-supplied PASS/FAIL as authoritative.
 

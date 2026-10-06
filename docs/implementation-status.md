@@ -16,6 +16,12 @@ Completed. See [`audit/phase-0-project-audit.md`](audit/phase-0-project-audit.md
 - Fixed DDL order so `app_user` exists before `signing_certificate` declares its creator foreign key.
 - Added Node/TypeScript workspace configuration and GitHub Actions checks for tests and typechecking.
 
+## Browser UX preview
+
+- Refreshed the packet's clickable prototype with a lighter default theme, stronger page hierarchy, more legible status and KPI cards, larger touch targets, and a responsive inspection-stage layout.
+- Added a dependency-free local preview server. Run `npm run preview` with the documented Node/npm versions and open `http://127.0.0.1:4173/`.
+- This is still a prototype: demo accounts and local browser storage stand in for authentication and persistence. The preview does not call the validation package or a server API.
+
 ## Verification
 
 - Unit tests: 26 passed.
@@ -26,7 +32,7 @@ Completed. See [`audit/phase-0-project-audit.md`](audit/phase-0-project-audit.md
 
 ## Not implemented yet
 
-No authentication or RBAC service, API, inspection UI, database migration runner, evidence service, signing/PDF workflow, Odoo integration, production deployment, or complete UAT suite is present. The current validation package is a first shared domain component; it is not yet connected to a server. Do not deploy this repository as a production QC system.
+No production authentication or RBAC service, API, inspection implementation, database migration runner, evidence service, signing/PDF workflow, Odoo integration, production deployment, or complete UAT suite is present. The clickable UI is a local-only UX prototype and is not wired to the validation package or a server. Do not deploy this repository as a production QC system.
 
 ## Next phases
 
@@ -34,4 +40,4 @@ No authentication or RBAC service, API, inspection UI, database migration runner
 2. Create versioned migrations and validate them against PostgreSQL 16.
 3. Implement server foundation: config, health/readiness, local authentication, sessions, RBAC guards, audit writes and migrations.
 4. Implement template/revision persistence and seed import, then call this engine from the API as the authoritative evaluator.
-5. Continue with inspection UX, evidence, review/approval, signed reporting, NCR and Odoo in the order set by the project roadmap.
+5. Connect the validated inspection UX to the server, then implement evidence, review/approval, signed reporting, NCR and Odoo in the order set by the project roadmap.
