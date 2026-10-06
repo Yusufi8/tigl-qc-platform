@@ -1,0 +1,485 @@
+openapi: 3.1.0
+info:
+  title: TIGL Quality API
+  version: 1.0.0-draft
+  description: |
+    REST API for qc.tiglobal.com. Session cookie (web) or Bearer API key (integrations).
+    Errors use RFC 9457 application/problem+json. All timestamps UTC ISO 8601.
+servers:
+  - url: https://qc.tiglobal.com/api/v1
+  - url: https://qc-sandbox.tiglobal.com/api/v1
+security:
+  - session: []
+  - apiKey: []
+tags:
+  - {name: Auth}
+  - {name: Inspections}
+  - {name: Signatures}
+  - {name: Reports}
+  - {name: Templates}
+  - {name: NCR}
+  - {name: Integrations}
+  - {name: Admin}
+  - {name: Platform}
+paths:
+  /health:
+    get:
+      tags: [Platform]
+      security: []
+      summary: Liveness and dependency status
+      responses:
+        '200': {description: 'OK', content: {application/json: {schema: {$ref: '#/components/schemas/Health'}}}}
+  /me:
+    get:
+      tags: [Platform]
+      summary: Current user, role, permissions and enabled modules (drives navigation)
+      responses:
+        '200': {description: 'OK', content: {application/json: {schema: {$ref: '#/components/schemas/Me'}}}}
+  /inspections:
+    get:
+      tags: [Inspections]
+      summary: List inspections
+      parameters:
+        - {name: status, in: query, schema: {$ref: '#/components/schemas/InspectionStatus'}}
+        - {name: result, in: query, schema: {$ref: '#/components/schemas/Result'}}
+        - {name: template, in: query, schema: {type: string}, description: 'Template code'}
+        - {name: work_order, in: query, schema: {type: string}}
+        - {name: serial, in: query, schema: {type: string}}
+        - {name: company_id, in: query, schema: {type: string}}
+        - {name: from, in: query, schema: {type: string, format: date}}
+        - {name: to, in: query, schema: {type: string, format: date}}
+        - {$ref: '#/components/parameters/Cursor'}
+        - {$ref: '#/components/parameters/Limit'}
+      responses:
+        '200':
+          description: Page of inspections
+          content: {application/json: {schema: {type: object, properties: {data: {type: array, items: {$ref: '#/components/schemas/InspectionSummary'}}, next_cursor: {type: [string, 'null']}}}}}
+    post:
+      tags: [Inspections]
+      summary: Create inspection on latest published revision of a template
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}]
+      requestBody:
+        required: true
+        content: {application/json: {schema: {$ref: '#/components/schemas/InspectionCreate'}}}
+      responses:
+        '201': {description: 'Created', content: {application/json: {schema: {$ref: '#/components/schemas/Inspection'}}}}
+        '422': {$ref: '#/components/responses/Problem'}
+  /inspections/{id}:
+    parameters: [{$ref: '#/components/parameters/Id'}]
+    get:
+      tags: [Inspections]
+      summary: Inspection with template snapshot, values, computed result and signatures
+      responses:
+        '200': {description: 'OK', content: {application/json: {schema: {$ref: '#/components/schemas/Inspection'}}}}
+        '404': {$ref: '#/components/responses/Problem'}
+  /inspections/{id}/values/{paramCode}:
+    parameters: [{$ref: '#/components/parameters/Id'}, {name: paramCode, in: path, required: true, schema: {type: string, example: TOL-018}}]
+    put:
+      tags: [Inspections]
+      summary: Record or change a value. Server re-evaluates and returns the new result.
+      parameters: [{name: If-Match, in: header, required: true, schema: {type: string}, description: 'Inspection version for optimistic locking'}]
+      requestBody:
+        required: true
+        content: {application/json: {schema: {type: object, properties: {value: {type: [string, number, 'null']}, remark: {type: string}}}}}
+      responses:
+        '200': {description: 'Saved', content: {application/json: {schema: {$ref: '#/components/schemas/ValueResult'}}}}
+        '409': {description: 'RECORD_SIGNED or VERSION_CONFLICT', content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}}}}
+  /inspections/{id}/evidence:
+    parameters: [{$ref: '#/components/parameters/Id'}]
+    post:
+      tags: [Inspections]
+      summary: Upload evidence (multipart). Max 25 MB. SHA-256 computed server-side.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema: {type: object, required: [file], properties: {file: {type: string, format: binary}, param_code: {type: string}}}
+      responses:
+        '201': {description: 'Stored', content: {application/json: {schema: {$ref: '#/components/schemas/Evidence'}}}}
+  /inspections/{id}/transitions:
+    parameters: [{$ref: '#/components/parameters/Id'}]
+    post:
+      tags: [Inspections]
+      summary: Workflow transition. submit/review/approve require a signature payload.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [action]
+              properties:
+                action: {type: string, enum: [submit, review, approve, reject, return]}
+                concession_note: {type: string, minLength: 10, description: 'Required when approving a HOLD result'}
+                reason: {type: string}
+                signature: {$ref: '#/components/schemas/SignatureCreate'}
+      responses:
+        '200': {description: 'New state', content: {application/json: {schema: {$ref: '#/components/schemas/Inspection'}}}}
+        '403': {$ref: '#/components/responses/Problem'}
+        '422': {description: 'Guard failed: INCOMPLETE or FAIL cannot be approved; or missing concession', content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}}}}
+  /inspections/{id}/signatures:
+    parameters: [{$ref: '#/components/parameters/Id'}]
+    get:
+      tags: [Signatures]
+      summary: Signature manifest
+      responses:
+        '200': {description: 'OK', content: {application/json: {schema: {type: array, items: {$ref: '#/components/schemas/Signature'}}}}}
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Sign in with username and password (sets session cookie). Returns must_change_password when a temporary password is in use
+      security: []
+      requestBody:
+        required: true
+        content: {application/json: {schema: {type: object, required: [username, password], properties: {username: {type: string}, password: {type: string, format: password}, totp: {type: string}}}}}
+      responses:
+        '200': {description: 'Signed in', content: {application/json: {schema: {type: object, properties: {must_change_password: {type: boolean}}}}}}
+        '401': {description: 'Incorrect username or password (deliberately generic)'}
+        '423': {description: 'Account locked'}
+  /auth/logout:
+    post: {tags: [Auth], summary: 'Sign out', responses: {'204': {description: 'Done'}}}
+  /auth/change-password:
+    post:
+      tags: [Auth]
+      summary: Change own password (mandatory after temporary password)
+      requestBody: {required: true, content: {application/json: {schema: {type: object, required: [current_password, new_password], properties: {current_password: {type: string, format: password}, new_password: {type: string, format: password}}}}}}
+      responses: {'204': {description: 'Changed'}, '422': {description: 'Policy not met or reuse'}}
+  /admin/users:
+    get: {tags: [Admin], summary: 'List users', responses: {'200': {description: 'OK'}}}
+    post:
+      tags: [Admin]
+      summary: Create user with role and a temporary password (System Admin only)
+      requestBody: {required: true, content: {application/json: {schema: {type: object, required: [full_name, username, role, designation], properties: {full_name: {type: string}, username: {type: string, pattern: '^[a-z][a-z0-9._-]{2,31}$'}, role: {type: string}, designation: {type: string}, site_id: {type: string, format: uuid}, email: {type: string}, temporary_password: {type: string, description: 'omit to auto-generate'}}}}}}
+      responses: {'201': {description: 'Created; temporary password returned once', content: {application/json: {schema: {type: object, properties: {id: {type: string}, temporary_password: {type: string}}}}}}}
+  /admin/users/{id}/reset-password:
+    post: {tags: [Admin], summary: 'Issue a new temporary password (returned once)', parameters: [{name: id, in: path, required: true, schema: {type: string, format: uuid}}], responses: {'200': {description: 'New temporary password'}}}
+  /admin/customers:
+    get: {tags: [Admin], summary: 'List customers with issuing entity', responses: {'200': {description: 'OK'}}}
+    post: {tags: [Admin], summary: 'Create customer with default issuing entity (company_id)', responses: {'201': {description: 'Created'}}}
+  /admin/entities/{id}/certificate:
+    post: {tags: [Admin], summary: 'Generate from internal CA or upload .p12 for the entity''s document-sealing certificate (key is never returned)', parameters: [{name: id, in: path, required: true, schema: {type: string}}], responses: {'201': {description: 'Active certificate metadata'}}}
+  /inspections/{id}/extra-parameters:
+    post:
+      tags: [Inspections]
+      summary: Add an order-specific check to a draft inspection (needs insp.add_check; reason mandatory)
+      parameters: [{name: id, in: path, required: true, schema: {type: string}}]
+      requestBody: {required: true, content: {application/json: {schema: {type: object, required: [label, type, reason], properties: {label: {type: string}, type: {type: string, enum: [qty, range, exact, yes_no, pass_fail, select, text]}, unit: {type: string}, min: {type: number}, max: {type: number}, expected: {type: string}, critical: {type: boolean}, evidence_required: {type: boolean}, reason: {type: string}}}}}}
+      responses: {'201': {description: 'Added'}, '409': {description: 'RECORD_SIGNED'}}
+  /templates/{code}/revisions/draft/parameters:
+    post: {tags: [Templates], summary: 'Add or change a check in the draft revision (incl. applies_to variants)', parameters: [{name: code, in: path, required: true, schema: {type: string}}], responses: {'200': {description: 'Saved'}}}
+  /signatures/reauth:
+    post:
+      tags: [Signatures]
+      summary: Re-enter own password (and TOTP if enabled) to get a 120-second single-use signing token
+      requestBody:
+        required: true
+        content: {application/json: {schema: {type: object, required: [password], properties: {password: {type: string, format: password}, totp: {type: string, description: '6-digit code if 2FA enabled'}}}}}
+      responses:
+        '200': {description: 'Token', content: {application/json: {schema: {type: object, properties: {reauth_token: {type: string}, expires_in: {type: integer}}}}}}
+        '401': {$ref: '#/components/responses/Problem'}
+  /verify/{signatureId}:
+    get:
+      tags: [Signatures]
+      summary: Recompute document hash and verify a signature
+      parameters: [{name: signatureId, in: path, required: true, schema: {type: string, example: SIG-8F2A91C3}}]
+      responses:
+        '200': {description: 'Verification result', content: {application/json: {schema: {type: object, properties: {valid: {type: boolean}, signed_hash: {type: string}, current_hash: {type: string}, revoked: {type: boolean}}}}}}
+  /reports/{id}:
+    parameters: [{$ref: '#/components/parameters/Id'}]
+    get:
+      tags: [Reports]
+      summary: Report model (JSON) for on-screen rendering; includes lock status
+      responses:
+        '200': {description: 'OK', content: {application/json: {schema: {$ref: '#/components/schemas/ReportModel'}}}}
+  /reports/{id}.pdf:
+    parameters: [{$ref: '#/components/parameters/Id'}]
+    get:
+      tags: [Reports]
+      summary: Signed PDF. Locked until all required signatures exist. Every download is audited.
+      responses:
+        '302': {description: 'Redirect to 5-minute signed URL'}
+        '423':
+          description: Report locked — required signatures missing
+          content: {application/problem+json: {schema: {allOf: [{$ref: '#/components/schemas/Problem'}, {type: object, properties: {missing: {type: array, items: {type: string}}}}]}}}
+  /templates:
+    post: {tags: [Templates], summary: 'Create a new machine template (blank/blueprint, copy, or import)', responses: {'201': {description: 'Draft rev A created'}}}
+    get:
+      tags: [Templates]
+      summary: Templates with revision list
+      responses:
+        '200': {description: 'OK', content: {application/json: {schema: {type: array, items: {$ref: '#/components/schemas/TemplateSummary'}}}}}
+  /templates/{code}/revisions:
+    parameters: [{name: code, in: path, required: true, schema: {type: string, example: AXIS-MM}}]
+    post:
+      tags: [Templates]
+      summary: Start a draft revision (copy of current published)
+      responses:
+        '201': {description: 'Draft created', content: {application/json: {schema: {$ref: '#/components/schemas/TemplateRevision'}}}}
+        '409': {description: 'A draft already exists'}
+  /templates/{code}/revisions/{rev}:
+    parameters:
+      - {name: code, in: path, required: true, schema: {type: string}}
+      - {name: rev, in: path, required: true, schema: {type: string, example: C}}
+    get:
+      tags: [Templates]
+      summary: Full revision (stages, sections, parameters)
+      responses:
+        '200': {description: 'OK', content: {application/json: {schema: {$ref: '#/components/schemas/TemplateRevision'}}}}
+    patch:
+      tags: [Templates]
+      summary: Edit a draft revision (409 if not draft)
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/TemplateRevision'}}}}
+      responses:
+        '200': {description: 'Saved'}
+  /templates/{code}/revisions/{rev}/actions:
+    parameters:
+      - {name: code, in: path, required: true, schema: {type: string}}
+      - {name: rev, in: path, required: true, schema: {type: string}}
+    post:
+      tags: [Templates]
+      summary: submit (Engineering) | return | publish (Quality Manager)
+      requestBody: {required: true, content: {application/json: {schema: {type: object, required: [action], properties: {action: {type: string, enum: [submit, return, publish, discard]}, note: {type: string}}}}}}
+      responses:
+        '200': {description: 'OK'}
+  /templates/{code}/revisions/{rev}/diff:
+    parameters:
+      - {name: code, in: path, required: true, schema: {type: string}}
+      - {name: rev, in: path, required: true, schema: {type: string}}
+    get:
+      tags: [Templates]
+      summary: Field-level diff against current published revision
+      responses:
+        '200': {description: 'OK', content: {application/json: {schema: {type: array, items: {type: object, properties: {param_code: {type: string}, field: {type: string}, from: {}, to: {}}}}}}}
+  /ncrs:
+    get:
+      tags: [NCR]
+      summary: List NCRs
+      parameters: [{name: status, in: query, schema: {type: string, enum: [open, closed]}}]
+      responses:
+        '200': {description: 'OK', content: {application/json: {schema: {type: array, items: {$ref: '#/components/schemas/Ncr'}}}}}
+  /ncrs/{id}:
+    parameters: [{$ref: '#/components/parameters/Id'}]
+    patch:
+      tags: [NCR]
+      summary: Update disposition / root cause / owner / close
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/Ncr'}}}}
+      responses:
+        '200': {description: 'OK'}
+  /integrations/odoo/lookup:
+    post:
+      tags: [Integrations]
+      summary: Resolve an Odoo manufacturing order to SO, customer, product, lot
+      requestBody: {required: true, content: {application/json: {schema: {type: object, required: [work_order], properties: {work_order: {type: string, example: WH/MO/00261}}}}}}
+      responses:
+        '200': {description: 'Found', content: {application/json: {schema: {$ref: '#/components/schemas/OdooLookup'}}}}
+        '404': {$ref: '#/components/responses/Problem'}
+        '502': {description: 'Odoo unreachable — client should allow manual entry'}
+  /integrations/{key}/test:
+    parameters: [{name: key, in: path, required: true, schema: {type: string, enum: [odoo, google, smtp]}}]
+    post:
+      tags: [Integrations]
+      summary: Test connection (smtp sends a test email to body.to)
+      requestBody: {content: {application/json: {schema: {type: object, properties: {to: {type: string, format: email}}}}}}
+      responses:
+        '200': {description: 'OK', content: {application/json: {schema: {type: object, properties: {ok: {type: boolean}, detail: {type: string}, latency_ms: {type: integer}}}}}}
+  /admin/settings:
+    get: {tags: [Admin], summary: 'Settings', responses: {'200': {description: 'OK'}}}
+    patch: {tags: [Admin], summary: 'Update settings (audited)', requestBody: {content: {application/json: {schema: {type: object}}}}, responses: {'200': {description: 'OK'}}}
+  /admin/modules:
+    get: {tags: [Admin], summary: 'Module toggles', responses: {'200': {description: 'OK'}}}
+    patch: {tags: [Admin], summary: 'Enable/disable modules (core modules rejected)', requestBody: {content: {application/json: {schema: {type: object, additionalProperties: {type: boolean}}}}}, responses: {'200': {description: 'OK'}}}
+  /admin/roles/{role}/permissions:
+    parameters: [{name: role, in: path, required: true, schema: {type: string}}]
+    put:
+      tags: [Admin]
+      summary: Replace a role's permissions. Guardrail violations return 422.
+      requestBody: {content: {application/json: {schema: {type: array, items: {type: string}}}}}
+      responses: {'200': {description: 'OK'}, '422': {$ref: '#/components/responses/Problem'}}
+  /admin/audit:
+    get:
+      tags: [Admin]
+      summary: Audit events (filter by entity, actor, action, date); CSV export with Accept text/csv
+      responses: {'200': {description: 'OK'}}
+  /api-keys:
+    get: {tags: [Platform], summary: 'List keys (prefix only)', responses: {'200': {description: 'OK'}}}
+    post: {tags: [Platform], summary: 'Create key — full key returned once', responses: {'201': {description: 'Created'}}}
+  /api-keys/{id}:
+    parameters: [{$ref: '#/components/parameters/Id'}]
+    delete: {tags: [Platform], summary: 'Revoke', responses: {'204': {description: 'Revoked'}}}
+  /webhooks:
+    get: {tags: [Platform], summary: 'List webhooks', responses: {'200': {description: 'OK'}}}
+    post:
+      tags: [Platform]
+      summary: Register webhook (HTTPS only). Deliveries signed X-TQC-Signature sha256=HMAC.
+      requestBody: {content: {application/json: {schema: {type: object, required: [url, events], properties: {url: {type: string, format: uri}, events: {type: array, items: {type: string}}}}}}}
+      responses: {'201': {description: 'Created'}}
+components:
+  securitySchemes:
+    session: {type: apiKey, in: cookie, name: tqc_session}
+    apiKey: {type: http, scheme: bearer, bearerFormat: tqc_<env>_<random>}
+  parameters:
+    Id: {name: id, in: path, required: true, schema: {type: string}, description: 'UUID or human number (QC-2026-0153)'}
+    Cursor: {name: cursor, in: query, schema: {type: string}}
+    Limit: {name: limit, in: query, schema: {type: integer, default: 50, maximum: 200}}
+    IdempotencyKey: {name: Idempotency-Key, in: header, schema: {type: string}}
+  responses:
+    Problem: {description: 'Error', content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}}}}
+  schemas:
+    Problem:
+      type: object
+      properties: {type: {type: string}, title: {type: string}, status: {type: integer}, detail: {type: string}, code: {type: string, example: RECORD_SIGNED}}
+    Health:
+      type: object
+      properties: {status: {type: string}, version: {type: string}, db: {type: string}, queue: {type: string}, odoo: {type: string}}
+    Me:
+      type: object
+      properties:
+        user: {type: object, properties: {id: {type: string}, name: {type: string}, email: {type: string}, designation: {type: string}}}
+        company_id: {type: string}
+        role: {type: string}
+        permissions: {type: array, items: {type: string}}
+        modules: {type: array, items: {type: string}}
+    InspectionStatus: {type: string, enum: [draft, submitted, reviewed, approved, rejected]}
+    Result: {type: string, enum: [INCOMPLETE, HOLD, FAIL, PASS]}
+    InspectionCreate:
+      type: object
+      required: [template_code, site_id, customer_name, work_order, machine_serial]
+      properties:
+        template_code: {type: string, example: AXIS-MM}
+        company_id: {type: string, example: TIGL}
+        site_id: {type: string}
+        customer_name: {type: string}
+        sales_order: {type: string}
+        work_order: {type: string}
+        machine_serial: {type: string}
+        machine_type: {type: string, enum: [Automatic, Manual, Standard, Extended]}
+        despatch_date: {type: string, format: date}
+        odoo: {$ref: '#/components/schemas/OdooRefs'}
+        parent_inspection_id: {type: string}
+    InspectionSummary:
+      type: object
+      properties:
+        id: {type: string}
+        number: {type: string}
+        status: {$ref: '#/components/schemas/InspectionStatus'}
+        result: {$ref: '#/components/schemas/Result'}
+        template: {type: object, properties: {code: {type: string}, revision: {type: string}}}
+        customer_name: {type: string}
+        work_order: {type: string}
+        machine_serial: {type: string}
+        created_at: {type: string, format: date-time}
+    Inspection:
+      allOf:
+        - $ref: '#/components/schemas/InspectionSummary'
+        - type: object
+          properties:
+            counts: {type: object, properties: {total: {type: integer}, done: {type: integer}, pass: {type: integer}, fail: {type: integer}, missing: {type: integer}, evidence: {type: integer}}}
+            values: {type: array, items: {$ref: '#/components/schemas/ValueResult'}}
+            signatures: {type: array, items: {$ref: '#/components/schemas/Signature'}}
+            concession_note: {type: [string, 'null']}
+            odoo: {$ref: '#/components/schemas/OdooRefs'}
+            version: {type: integer}
+    ValueResult:
+      type: object
+      properties:
+        param_code: {type: string}
+        value: {type: [string, number, 'null']}
+        result: {type: string, enum: [pass, fail, missing, invalid, evidence, recorded, na]}
+        remark: {type: string}
+        inspection_result: {$ref: '#/components/schemas/Result'}
+    Evidence:
+      type: object
+      properties: {id: {type: string}, param_code: {type: string}, file_name: {type: string}, mime: {type: string}, bytes: {type: integer}, sha256: {type: string}}
+    SignatureCreate:
+      type: object
+      required: [slot_key, typed_name, initials, designation, mode, font, intent_accepted, reauth_token]
+      properties:
+        slot_key: {type: string, enum: [checked, reviewed, approved]}
+        typed_name: {type: string, minLength: 3}
+        initials: {type: string, maxLength: 4}
+        designation: {type: string}
+        mode: {type: string, enum: [type, initials]}
+        font: {type: string, enum: [Dancing Script, Great Vibes, Caveat, Homemade Apple]}
+        intent_accepted: {type: boolean, const: true}
+        reauth_token: {type: string}
+    Signature:
+      type: object
+      properties:
+        public_id: {type: string}
+        slot_key: {type: string}
+        meaning: {type: string}
+        typed_name: {type: string}
+        initials: {type: string}
+        designation: {type: string}
+        mode: {type: string}
+        font: {type: string}
+        signer_email: {type: string}
+        signed_at: {type: string, format: date-time}
+        doc_hash_sha256: {type: string}
+        revoked: {type: boolean}
+    ReportModel:
+      type: object
+      properties:
+        locked: {type: boolean}
+        missing_slots: {type: array, items: {type: string}}
+        inspection: {$ref: '#/components/schemas/Inspection'}
+        company: {type: object}
+    TemplateSummary:
+      type: object
+      properties: {code: {type: string}, name: {type: string}, family: {type: string}, current_revision: {type: string}, revisions: {type: array, items: {type: object, properties: {revision: {type: string}, status: {type: string}}}}}
+    TemplateRevision:
+      type: object
+      properties:
+        code: {type: string}
+        revision: {type: string}
+        status: {type: string, enum: [draft, in_review, published, superseded]}
+        stages:
+          type: array
+          items:
+            type: object
+            properties:
+              code: {type: string}
+              name: {type: string}
+              sections:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name: {type: string}
+                    params: {type: array, items: {$ref: '#/components/schemas/Parameter'}}
+    Parameter:
+      type: object
+      required: [id, label, type, mandatory]
+      properties:
+        id: {type: string, description: 'Stable parameter code, example: TOL-018'}
+        label: {type: string}
+        type: {type: string, enum: [qty, range, exact, yes_no, pass_fail, select, text]}
+        unit: {type: string}
+        min: {type: number}
+        max: {type: number}
+        expected: {type: [string, number]}
+        options: {type: array, items: {type: string}}
+        accept: {type: array, items: {type: string}}
+        criteria: {type: string}
+        hint: {type: string}
+        mandatory: {type: boolean}
+        critical: {type: boolean}
+        evidence: {type: boolean}
+        tbc: {type: boolean}
+    Ncr:
+      type: object
+      properties: {number: {type: string}, inspection: {type: string}, param_code: {type: string}, description: {type: string}, disposition: {type: string}, root_cause: {type: string}, owner_id: {type: string}, due_date: {type: string, format: date}, status: {type: string, enum: [open, closed]}}
+    OdooRefs:
+      type: object
+      properties: {sale_order_id: {type: integer}, partner_id: {type: integer}, mrp_production_id: {type: integer}, product_id: {type: integer}, lot_id: {type: integer}}
+    OdooLookup:
+      type: object
+      properties:
+        work_order: {type: string}
+        sales_order: {type: string}
+        customer_name: {type: string}
+        product_code: {type: string}
+        suggested_template: {type: string}
+        machine_serial: {type: string}
+        planned_date: {type: string, format: date}
+        refs: {$ref: '#/components/schemas/OdooRefs'}

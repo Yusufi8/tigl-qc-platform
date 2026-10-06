@@ -1,0 +1,3924 @@
+{
+ "source": "Axis_Final.xls (Sheet1, Sheet6, Sheet2, Sheet3, Sheet4, Sheet5)",
+ "templates": [
+  {
+   "code": "AXIS-MM",
+   "name": "AXIS Automatic Milling Machine",
+   "family": "AXIS",
+   "revision": "B",
+   "status": "published",
+   "effective": "2026-08-01",
+   "header_fields": [
+    "Customer",
+    "Sales order",
+    "Work order",
+    "Machine serial no.",
+    "Machine type",
+    "Despatch date"
+   ],
+   "machine_types": [
+    "Automatic",
+    "Manual",
+    "Standard",
+    "Extended"
+   ],
+   "stages": [
+    {
+     "code": "COMP",
+     "name": "Component verification",
+     "sections": [
+      {
+       "name": "Head stock assembly",
+       "params": [
+        {
+         "label": "13T helical gear",
+         "type": "qty",
+         "expected": 2,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-001",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Spur gears 20T, 48T, 42T, 70T (each)",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-002",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Taper roller bearing 30206",
+         "type": "qty",
+         "expected": 3,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-003",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Taper roller bearing 30207",
+         "type": "qty",
+         "expected": 3,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-004",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Taper roller bearing 30216",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-005",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      },
+      {
+       "name": "Indexing assembly",
+       "params": [
+        {
+         "label": "Spur gear 48T",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-006",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Spur gear 21T with centre lead screw rod",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-007",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Spur gear 54T (jockey)",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-008",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      },
+      {
+       "name": "Main drive gear box",
+       "params": [
+        {
+         "label": "Gear box W75 / SW75 / TW75",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-009",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Make",
+         "type": "select",
+         "options": [
+          "Bonfiglioli",
+          "Super Sales",
+          "Transtech"
+         ],
+         "accept": [
+          "Bonfiglioli",
+          "Super Sales",
+          "Transtech"
+         ],
+         "mandatory": true,
+         "id": "COMP-010",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Ratio",
+         "type": "exact",
+         "expected": "15:1",
+         "unit": "",
+         "mandatory": true,
+         "id": "COMP-011",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Serial no.",
+         "type": "text",
+         "mandatory": true,
+         "id": "COMP-012",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Mount",
+         "type": "exact",
+         "expected": "90 B5",
+         "unit": "",
+         "mandatory": true,
+         "id": "COMP-013",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      },
+      {
+       "name": "Main drive motor",
+       "params": [
+        {
+         "label": "Motor 2 HP, 1440 RPM, flange mounting",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-014",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Make",
+         "type": "select",
+         "options": [
+          "Dharani",
+          "ABB",
+          "Siemens"
+         ],
+         "accept": [
+          "Dharani",
+          "ABB",
+          "Siemens"
+         ],
+         "mandatory": true,
+         "id": "COMP-015",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Serial no.",
+         "type": "text",
+         "mandatory": true,
+         "evidence": true,
+         "hint": "Photo of nameplate",
+         "id": "COMP-016",
+         "critical": false
+        },
+        {
+         "label": "Speed",
+         "type": "exact",
+         "expected": 1440,
+         "unit": "RPM",
+         "mandatory": true,
+         "id": "COMP-017",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Voltage",
+         "type": "text",
+         "mandatory": true,
+         "id": "COMP-018",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Power",
+         "type": "exact",
+         "expected": 2,
+         "unit": "HP",
+         "mandatory": true,
+         "id": "COMP-019",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Insulation class",
+         "type": "text",
+         "mandatory": true,
+         "id": "COMP-020",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Rated current (A)",
+         "type": "text",
+         "mandatory": true,
+         "id": "COMP-021",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Efficiency grade",
+         "type": "select",
+         "options": [
+          "IE2",
+          "IE3"
+         ],
+         "accept": [
+          "IE2",
+          "IE3"
+         ],
+         "mandatory": true,
+         "id": "COMP-022",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "No-load current",
+         "type": "range",
+         "min": 0,
+         "max": 80,
+         "unit": "% of rated",
+         "mandatory": true,
+         "critical": true,
+         "criteria": "Consumed amps ≤ 80% of rated",
+         "id": "COMP-023",
+         "evidence": false
+        }
+       ]
+      },
+      {
+       "name": "Saddle and cross slide",
+       "params": [
+        {
+         "label": "Linear slide on the bed",
+         "type": "qty",
+         "expected": 2,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-024",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Bed slide make",
+         "type": "text",
+         "mandatory": true,
+         "id": "COMP-025",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "LM block (bed)",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-026",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Linear slide on the saddle",
+         "type": "qty",
+         "expected": 2,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-027",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Saddle slide make",
+         "type": "text",
+         "mandatory": true,
+         "id": "COMP-028",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "LM block (saddle)",
+         "type": "qty",
+         "expected": 4,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-029",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "AC synchronous motor",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-030",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Synchronous motor make",
+         "type": "exact",
+         "expected": "Srijan Controls Ltd",
+         "unit": "",
+         "mandatory": true,
+         "id": "COMP-031",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Synchronous motor torque",
+         "type": "exact",
+         "expected": 60,
+         "unit": "kgf·cm",
+         "mandatory": true,
+         "id": "COMP-032",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Synchronous motor speed",
+         "type": "exact",
+         "expected": 60,
+         "unit": "RPM",
+         "mandatory": true,
+         "id": "COMP-033",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Synchronous motor serial no.",
+         "type": "text",
+         "mandatory": true,
+         "id": "COMP-034",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Synchronous motor voltage",
+         "type": "exact",
+         "expected": 240,
+         "unit": "V",
+         "mandatory": true,
+         "id": "COMP-035",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Synchronous motor model",
+         "type": "exact",
+         "expected": "SYN1103",
+         "unit": "",
+         "mandatory": true,
+         "id": "COMP-036",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      },
+      {
+       "name": "Milling cutter drive assembly",
+       "params": [
+        {
+         "label": "Spindle bearing 32206",
+         "type": "qty",
+         "expected": 2,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-037",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box W63/12",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-038",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box make",
+         "type": "select",
+         "options": [
+          "Bonfiglioli",
+          "Super Sales"
+         ],
+         "accept": [
+          "Bonfiglioli",
+          "Super Sales"
+         ],
+         "mandatory": true,
+         "id": "COMP-039",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box ratio",
+         "type": "exact",
+         "expected": "12:1",
+         "unit": "",
+         "mandatory": true,
+         "id": "COMP-040",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box type",
+         "type": "exact",
+         "expected": "W63",
+         "unit": "",
+         "mandatory": true,
+         "id": "COMP-041",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box code",
+         "type": "text",
+         "mandatory": false,
+         "id": "COMP-042",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box mount",
+         "type": "text",
+         "mandatory": false,
+         "id": "COMP-043",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box batch",
+         "type": "text",
+         "mandatory": false,
+         "id": "COMP-044",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box run out",
+         "type": "range",
+         "min": 0,
+         "max": 0.02,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "COMP-045",
+         "evidence": false
+        },
+        {
+         "label": "Motor 1 HP, 1440 RPM, flange mounting",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-046",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Motor make",
+         "type": "select",
+         "options": [
+          "Dharani",
+          "ABB",
+          "Siemens"
+         ],
+         "accept": [
+          "Dharani",
+          "ABB",
+          "Siemens"
+         ],
+         "mandatory": true,
+         "id": "COMP-047",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Motor power",
+         "type": "exact",
+         "expected": 1,
+         "unit": "HP",
+         "mandatory": true,
+         "id": "COMP-048",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Motor speed",
+         "type": "exact",
+         "expected": 1440,
+         "unit": "RPM",
+         "mandatory": true,
+         "id": "COMP-049",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Motor serial no.",
+         "type": "text",
+         "mandatory": true,
+         "evidence": true,
+         "hint": "Photo of nameplate",
+         "id": "COMP-050",
+         "critical": false
+        },
+        {
+         "label": "Motor voltage",
+         "type": "exact",
+         "expected": 415,
+         "unit": "V",
+         "mandatory": true,
+         "id": "COMP-051",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Motor insulation class",
+         "type": "exact",
+         "expected": "F",
+         "unit": "",
+         "mandatory": true,
+         "id": "COMP-052",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Motor rating",
+         "type": "exact",
+         "expected": 0.75,
+         "unit": "kW",
+         "mandatory": true,
+         "id": "COMP-053",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Motor efficiency grade",
+         "type": "select",
+         "options": [
+          "IE2",
+          "IE3"
+         ],
+         "accept": [
+          "IE2",
+          "IE3"
+         ],
+         "mandatory": true,
+         "id": "COMP-054",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      },
+      {
+       "name": "Chuck",
+       "params": [
+        {
+         "label": "Make",
+         "type": "exact",
+         "expected": "Shasons",
+         "unit": "",
+         "mandatory": true,
+         "id": "COMP-055",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Size",
+         "type": "exact",
+         "expected": 10,
+         "unit": "in",
+         "mandatory": true,
+         "id": "COMP-056",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Jaws",
+         "type": "exact",
+         "expected": 4,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-057",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "code": "ASSY",
+     "name": "Assembly checks",
+     "sections": [
+      {
+       "name": "Assembly checking parameters",
+       "params": [
+        {
+         "label": "Gear matching assembly",
+         "type": "pass_fail",
+         "criteria": "No projection",
+         "mandatory": true,
+         "id": "ASSY-001",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Lead screw rod assembly",
+         "type": "pass_fail",
+         "criteria": "Backlash nut with spring fitted",
+         "mandatory": true,
+         "id": "ASSY-002",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box and motor assembly",
+         "type": "pass_fail",
+         "criteria": "Horizontal fitting",
+         "mandatory": true,
+         "id": "ASSY-003",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Head stock — oil leakage",
+         "type": "pass_fail",
+         "criteria": "No oil leakage",
+         "mandatory": true,
+         "critical": true,
+         "id": "ASSY-004",
+         "evidence": false
+        },
+        {
+         "label": "Head stock — dowel pins",
+         "type": "pass_fail",
+         "criteria": "Dowel pins fitted",
+         "mandatory": true,
+         "id": "ASSY-005",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Head stock — bolts",
+         "type": "pass_fail",
+         "criteria": "HT bolts used",
+         "mandatory": true,
+         "id": "ASSY-006",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Saddle cross slide assembly",
+         "type": "pass_fail",
+         "criteria": "Free manual movement",
+         "mandatory": true,
+         "id": "ASSY-007",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Three roller support assembly",
+         "type": "pass_fail",
+         "criteria": "Bearings fitted to correct tightness, rotate freely",
+         "mandatory": true,
+         "id": "ASSY-008",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Control panel phase indicator",
+         "type": "pass_fail",
+         "criteria": "Phase indicator and contactor function",
+         "mandatory": true,
+         "id": "ASSY-009",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Indexing assembly",
+         "type": "pass_fail",
+         "criteria": "Chuck done with 2 pins — 100, 80, 70, 60, 50",
+         "mandatory": true,
+         "id": "ASSY-010",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Quality of milling",
+         "type": "pass_fail",
+         "criteria": "No vibration",
+         "mandatory": true,
+         "critical": true,
+         "evidence": true,
+         "hint": "Photo/video of trial cut",
+         "id": "ASSY-011"
+        },
+        {
+         "label": "Cross slide screw rod and nut",
+         "type": "pass_fail",
+         "criteria": "Lubrication provision present",
+         "mandatory": true,
+         "id": "ASSY-012",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "code": "ALGN",
+     "name": "Alignment",
+     "sections": [
+      {
+       "name": "Head stock alignment",
+       "params": [
+        {
+         "label": "Head stock — horizontal",
+         "type": "range",
+         "min": 0,
+         "max": 0.05,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "ALGN-001",
+         "evidence": false
+        },
+        {
+         "label": "Head stock — vertical",
+         "type": "range",
+         "min": 0,
+         "max": 0.05,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "ALGN-002",
+         "evidence": false
+        },
+        {
+         "label": "Head stock to three roller support — horizontal",
+         "type": "range",
+         "min": 0,
+         "max": 0.05,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "ALGN-003",
+         "evidence": false
+        },
+        {
+         "label": "Head stock to three roller support — vertical",
+         "type": "range",
+         "min": 0,
+         "max": 0.05,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "ALGN-004",
+         "evidence": false
+        },
+        {
+         "label": "Three roller supports — tail end",
+         "type": "range",
+         "min": 0,
+         "max": 0.05,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "tbc": true,
+         "id": "ALGN-005",
+         "evidence": false
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "code": "TOL",
+     "name": "Tolerance inspection",
+     "sections": [
+      {
+       "name": "Tolerance details",
+       "params": [
+        {
+         "label": "Top plate — run out / face out",
+         "type": "range",
+         "min": 0,
+         "max": 0.05,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-001",
+         "evidence": false
+        },
+        {
+         "label": "Guide plate — run out / face out",
+         "type": "range",
+         "min": 0,
+         "max": 0.05,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-002",
+         "evidence": false
+        },
+        {
+         "label": "Index plate — run out / face out",
+         "type": "range",
+         "min": 0,
+         "max": 0.05,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-003",
+         "evidence": false
+        },
+        {
+         "label": "Lead screw rod — bend",
+         "type": "range",
+         "min": 0,
+         "max": 0.4,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-004",
+         "evidence": false
+        },
+        {
+         "label": "Main drive gear box — temperature",
+         "type": "range",
+         "min": 35,
+         "max": 50,
+         "unit": "°C",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-005",
+         "evidence": false
+        },
+        {
+         "label": "Taper, three roller support to head stock (H & V)",
+         "type": "range",
+         "min": 0,
+         "max": 0.05,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-006",
+         "evidence": false
+        },
+        {
+         "label": "Worm wheel shaft — run out",
+         "type": "range",
+         "min": 0,
+         "max": 0.03,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-007",
+         "evidence": false
+        },
+        {
+         "label": "Main lead screw rod with nut — axial play",
+         "type": "range",
+         "min": 0,
+         "max": 0.1,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-008",
+         "evidence": false
+        },
+        {
+         "label": "Cross slide screw rod with nut — axial play",
+         "type": "range",
+         "min": 0,
+         "max": 0.1,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-009",
+         "evidence": false
+        },
+        {
+         "label": "Cutter drive shaft — run out",
+         "type": "range",
+         "min": 0,
+         "max": 0.03,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-010",
+         "evidence": false
+        },
+        {
+         "label": "Cutter gear box — no-load temperature",
+         "type": "range",
+         "min": 0,
+         "max": 35,
+         "unit": "°C",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-011",
+         "evidence": false
+        },
+        {
+         "label": "Cutter drive housing to gear box — clearance",
+         "type": "range",
+         "min": 0,
+         "max": 0.05,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-012",
+         "evidence": false
+        },
+        {
+         "label": "Worm shaft and wheel assembly — run out",
+         "type": "range",
+         "min": 0,
+         "max": 0.05,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-013",
+         "evidence": false
+        },
+        {
+         "label": "Linear guide and bearing block — fitment",
+         "type": "pass_fail",
+         "criteria": "No shake",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-014",
+         "evidence": false
+        },
+        {
+         "label": "Index arm mounting bracket — position and weld",
+         "type": "range",
+         "min": 89.5,
+         "max": 90.5,
+         "unit": "deg",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-015",
+         "evidence": false
+        },
+        {
+         "label": "Top shaft — axial play",
+         "type": "range",
+         "min": 0,
+         "max": 0.1,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-016",
+         "evidence": false
+        },
+        {
+         "label": "Bottom shaft — axial play",
+         "type": "range",
+         "min": 0,
+         "max": 0.1,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-017",
+         "evidence": false
+        },
+        {
+         "label": "Worm wheel and worm shaft — centre distance",
+         "type": "range",
+         "min": 101.5,
+         "max": 101.85,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "tbc": true,
+         "id": "TOL-018",
+         "evidence": false
+        },
+        {
+         "label": "Main spindle — run out",
+         "type": "range",
+         "min": 0,
+         "max": 0.03,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-019",
+         "evidence": false
+        },
+        {
+         "label": "Head stock holes — centre distance deviation",
+         "type": "range",
+         "min": -0.2,
+         "max": 0.2,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-020",
+         "evidence": false
+        },
+        {
+         "label": "Plunger pin — ovality",
+         "type": "range",
+         "min": 0,
+         "max": 0.02,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-021",
+         "evidence": false
+        },
+        {
+         "label": "Linear slide on the bed — alignment",
+         "type": "range",
+         "min": 0,
+         "max": 0.03,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-022",
+         "evidence": false
+        },
+        {
+         "label": "Synchronous motor — winding resistance",
+         "type": "range",
+         "min": 185,
+         "max": 205,
+         "unit": "Ω",
+         "mandatory": true,
+         "critical": true,
+         "tbc": true,
+         "id": "TOL-023",
+         "evidence": false
+        },
+        {
+         "label": "Chuck — run out and face out",
+         "type": "range",
+         "min": 0,
+         "max": 0.04,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-024",
+         "evidence": false
+        },
+        {
+         "label": "Coolant pump — temperature",
+         "type": "range",
+         "min": 0,
+         "max": 50,
+         "unit": "°C",
+         "mandatory": true,
+         "id": "TOL-025",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "code": "ELEC",
+     "name": "Control panel and electrical",
+     "sections": [
+      {
+       "name": "Inside control panel",
+       "params": [
+        {
+         "label": "Contactor rating",
+         "type": "range",
+         "min": 9,
+         "max": 12,
+         "unit": "A",
+         "mandatory": true,
+         "id": "ELEC-001",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "SMPS provided",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "ELEC-002",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "MPCB rating",
+         "type": "range",
+         "min": 1.6,
+         "max": 2.64,
+         "unit": "A",
+         "mandatory": true,
+         "id": "ELEC-003",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "AC variator manual provided",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "ELEC-004",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Laminated wiring diagram and manual book",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "ELEC-005",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Warning note pasted",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "ELEC-006",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Indicator bulbs functioning",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "ELEC-007",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Counter functioning",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "ELEC-008",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Power failure and restart tested",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "critical": true,
+         "evidence": true,
+         "hint": "Video of restart test",
+         "id": "ELEC-009"
+        },
+        {
+         "label": "Panel board make",
+         "type": "text",
+         "mandatory": true,
+         "id": "ELEC-010",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Panel board serial no.",
+         "type": "text",
+         "mandatory": true,
+         "id": "ELEC-011",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Drawing no.",
+         "type": "text",
+         "mandatory": true,
+         "id": "ELEC-012",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Month / year",
+         "type": "text",
+         "mandatory": true,
+         "id": "ELEC-013",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      },
+      {
+       "name": "Milling machine electrical testing",
+       "params": [
+        {
+         "label": "MPCB 1.4–2.3 A — rating test",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-014",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "MPCB 0.3–0.6 A — rating test",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-015",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "AC drive 2 HP",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-016",
+         "critical": false,
+         "evidence": false,
+         "applies": [
+          "Automatic"
+         ]
+        },
+        {
+         "label": "2 C/O relay 24 V DC (6 nos)",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-017",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "12 A contactor (5 nos)",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-018",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "415 V incoming",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-019",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "24 V AC transformer — incoming",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-020",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "13 R/F — outgoing",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-021",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Transformer 415/230/24 V AC, 100+50+150 VA — rating test",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-022",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Ø18 mm NPN sensor",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-023",
+         "critical": false,
+         "evidence": false,
+         "applies": [
+          "Automatic"
+         ]
+        },
+        {
+         "label": "MCB 20 A 4P — incoming",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-024",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "MCB 10 A 3P — 2 HP AC drive incoming",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-025",
+         "critical": false,
+         "evidence": false,
+         "applies": [
+          "Automatic"
+         ]
+        },
+        {
+         "label": "MCB 6 A 2P — 240 V AC incoming",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-026",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "MCB 6 A 2P — 24 V AC incoming",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-027",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "code": "FIN",
+     "name": "Safety, finish and coolant",
+     "sections": [
+      {
+       "name": "Safety guards",
+       "params": [
+        {
+         "label": "Head stock gear drive guard (1 no)",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "critical": true,
+         "id": "FIN-001",
+         "evidence": false
+        },
+        {
+         "label": "Quality of chip tray (1 no)",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "FIN-002",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      },
+      {
+       "name": "Finish",
+       "params": [
+        {
+         "label": "General finish",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "FIN-003",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Painting",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "FIN-004",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      },
+      {
+       "name": "Coolant pump",
+       "params": [
+        {
+         "label": "Machine no.",
+         "type": "text",
+         "mandatory": true,
+         "id": "FIN-005",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Power",
+         "type": "exact",
+         "expected": 0.1,
+         "unit": "kW",
+         "mandatory": true,
+         "id": "FIN-006",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Voltage",
+         "type": "exact",
+         "expected": 230,
+         "unit": "V",
+         "mandatory": true,
+         "id": "FIN-007",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Speed",
+         "type": "exact",
+         "expected": 2800,
+         "unit": "RPM",
+         "mandatory": true,
+         "id": "FIN-008",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Make",
+         "type": "exact",
+         "expected": "Stark",
+         "unit": "",
+         "mandatory": true,
+         "id": "FIN-009",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Coolant pump runs on saddle forward movement",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "FIN-010",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "code": "TOOLS",
+     "name": "Tools and accessories",
+     "sections": [
+      {
+       "name": "Tools list",
+       "params": [
+        {
+         "label": "Foundation bolt M12 × 300",
+         "type": "qty",
+         "expected": 8,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-001",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Collar Ø55",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-002",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Hardened sleeve Ø65",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-003",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Chuck key",
+         "type": "qty",
+         "expected": 2,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-004",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Plunger pin",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-005",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Tool kit",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-006",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Small pipe hose",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-007",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Clamp (small hose)",
+         "type": "qty",
+         "expected": 2,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-008",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Big pipe hose",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-009",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Clamp (big hose)",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-010",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Handle and lever",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-011",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Chuck shoe",
+         "type": "qty",
+         "expected": 2,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-012",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "SS tray",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-013",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "MS tray",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-014",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      },
+      {
+       "name": "Tool kit contents",
+       "params": [
+        {
+         "label": "Double end spanner 10×11",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-015",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Double end spanner 12×13",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-016",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Double end spanner 17×19",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-017",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Double end spanner 24×26",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-018",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Double end spanner 32×36",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-019",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Ring spanner 17×19",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-020",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Ring spanner 24×26",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-021",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Allen key 4 mm",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-022",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Allen key 5 mm",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-023",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Allen key 6 mm",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-024",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Allen key 8 mm",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-025",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Allen key 10 mm",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-026",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Lever type grease can",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-027",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Oil can",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-028",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Bearing NJ 205",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-029",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Coolant hose",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-030",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "On/off valve",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-031",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Coolant hose holder",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-032",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Star knob",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-033",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      },
+      {
+       "name": "Optional items",
+       "params": [
+        {
+         "label": "Collar Ø60",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": false,
+         "id": "TOOLS-034",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Collar Ø70",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": false,
+         "id": "TOOLS-035",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "variant_field": "Machine type"
+  },
+  {
+   "code": "AXIS-TMH",
+   "name": "AXIS Twin Milling Head Milling Machine",
+   "family": "AXIS",
+   "revision": "A",
+   "status": "published",
+   "effective": "2026-08-01",
+   "header_fields": [
+    "Customer",
+    "Sales order",
+    "Work order",
+    "Machine serial no.",
+    "Machine type",
+    "Despatch date"
+   ],
+   "machine_types": [
+    "Automatic",
+    "Manual",
+    "Standard",
+    "Extended"
+   ],
+   "stages": [
+    {
+     "code": "COMP",
+     "name": "Component verification",
+     "sections": [
+      {
+       "name": "Head stock assembly",
+       "params": [
+        {
+         "label": "13T helical gear",
+         "type": "qty",
+         "expected": 2,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-001",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Spur gears 20T, 48T, 42T, 70T (each)",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-002",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Taper roller bearing 30206",
+         "type": "qty",
+         "expected": 3,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-003",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Taper roller bearing 30207",
+         "type": "qty",
+         "expected": 3,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-004",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Taper roller bearing 30216",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-005",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      },
+      {
+       "name": "Indexing assembly",
+       "params": [
+        {
+         "label": "Spur gear 48T",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-006",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Spur gear 21T with centre lead screw rod",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-007",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Spur gear 54T (jockey)",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-008",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      },
+      {
+       "name": "Main drive gear box",
+       "params": [
+        {
+         "label": "Gear box W75 / SW75 / TW75",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-009",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Make",
+         "type": "select",
+         "options": [
+          "Bonfiglioli",
+          "Super Sales",
+          "Transtech"
+         ],
+         "accept": [
+          "Bonfiglioli",
+          "Super Sales",
+          "Transtech"
+         ],
+         "mandatory": true,
+         "id": "COMP-010",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Ratio",
+         "type": "exact",
+         "expected": "15:1",
+         "unit": "",
+         "mandatory": true,
+         "id": "COMP-011",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Serial no.",
+         "type": "text",
+         "mandatory": true,
+         "id": "COMP-012",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Mount",
+         "type": "exact",
+         "expected": "90 B5",
+         "unit": "",
+         "mandatory": true,
+         "id": "COMP-013",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      },
+      {
+       "name": "Main drive motor",
+       "params": [
+        {
+         "label": "Motor 2 HP, 1440 RPM, flange mounting",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-014",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Make",
+         "type": "select",
+         "options": [
+          "Dharani",
+          "ABB",
+          "Siemens"
+         ],
+         "accept": [
+          "Dharani",
+          "ABB",
+          "Siemens"
+         ],
+         "mandatory": true,
+         "id": "COMP-015",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Serial no.",
+         "type": "text",
+         "mandatory": true,
+         "evidence": true,
+         "hint": "Photo of nameplate",
+         "id": "COMP-016",
+         "critical": false
+        },
+        {
+         "label": "Speed",
+         "type": "exact",
+         "expected": 1440,
+         "unit": "RPM",
+         "mandatory": true,
+         "id": "COMP-017",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Voltage",
+         "type": "text",
+         "mandatory": true,
+         "id": "COMP-018",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Power",
+         "type": "exact",
+         "expected": 2,
+         "unit": "HP",
+         "mandatory": true,
+         "id": "COMP-019",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Insulation class",
+         "type": "text",
+         "mandatory": true,
+         "id": "COMP-020",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Rated current (A)",
+         "type": "text",
+         "mandatory": true,
+         "id": "COMP-021",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Efficiency grade",
+         "type": "select",
+         "options": [
+          "IE2",
+          "IE3"
+         ],
+         "accept": [
+          "IE2",
+          "IE3"
+         ],
+         "mandatory": true,
+         "id": "COMP-022",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "No-load current",
+         "type": "range",
+         "min": 0,
+         "max": 80,
+         "unit": "% of rated",
+         "mandatory": true,
+         "critical": true,
+         "criteria": "Consumed amps ≤ 80% of rated",
+         "id": "COMP-023",
+         "evidence": false
+        }
+       ]
+      },
+      {
+       "name": "Saddle and cross slide",
+       "params": [
+        {
+         "label": "Linear slide on the bed",
+         "type": "qty",
+         "expected": 2,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-024",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Bed slide make",
+         "type": "text",
+         "mandatory": true,
+         "id": "COMP-025",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "LM block (bed)",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-026",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Linear slide on the saddle",
+         "type": "qty",
+         "expected": 2,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-027",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Saddle slide make",
+         "type": "text",
+         "mandatory": true,
+         "id": "COMP-028",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "LM block (saddle)",
+         "type": "qty",
+         "expected": 8,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-029",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "AC synchronous motor",
+         "type": "qty",
+         "expected": 2,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-030",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Synchronous motor make",
+         "type": "exact",
+         "expected": "Srijan Controls Ltd",
+         "unit": "",
+         "mandatory": true,
+         "id": "COMP-031",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Synchronous motor torque",
+         "type": "exact",
+         "expected": 60,
+         "unit": "kgf·cm",
+         "mandatory": true,
+         "id": "COMP-032",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Synchronous motor speed",
+         "type": "exact",
+         "expected": 60,
+         "unit": "RPM",
+         "mandatory": true,
+         "id": "COMP-033",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Synchronous motor serial no.",
+         "type": "text",
+         "mandatory": true,
+         "id": "COMP-034",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Synchronous motor voltage",
+         "type": "exact",
+         "expected": 240,
+         "unit": "V",
+         "mandatory": true,
+         "id": "COMP-035",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Synchronous motor model",
+         "type": "exact",
+         "expected": "SYN1103",
+         "unit": "",
+         "mandatory": true,
+         "id": "COMP-036",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      },
+      {
+       "name": "Milling cutter drive assembly",
+       "params": [
+        {
+         "label": "Spindle bearing 32206",
+         "type": "qty",
+         "expected": 4,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-037",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box W63/12 #1",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-038",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box make #1",
+         "type": "select",
+         "options": [
+          "Bonfiglioli",
+          "Super Sales"
+         ],
+         "accept": [
+          "Bonfiglioli",
+          "Super Sales"
+         ],
+         "mandatory": true,
+         "id": "COMP-039",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box ratio #1",
+         "type": "exact",
+         "expected": "12:1",
+         "unit": "",
+         "mandatory": true,
+         "id": "COMP-040",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box type #1",
+         "type": "exact",
+         "expected": "W63",
+         "unit": "",
+         "mandatory": true,
+         "id": "COMP-041",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box code #1",
+         "type": "text",
+         "mandatory": false,
+         "id": "COMP-042",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box mount #1",
+         "type": "text",
+         "mandatory": false,
+         "id": "COMP-043",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box batch #1",
+         "type": "text",
+         "mandatory": false,
+         "id": "COMP-044",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box run out #1",
+         "type": "range",
+         "min": 0,
+         "max": 0.02,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "COMP-045",
+         "evidence": false
+        },
+        {
+         "label": "Motor 1 HP, 1440 RPM, flange mounting #1",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-046",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Motor make #1",
+         "type": "select",
+         "options": [
+          "Dharani",
+          "ABB",
+          "Siemens"
+         ],
+         "accept": [
+          "Dharani",
+          "ABB",
+          "Siemens"
+         ],
+         "mandatory": true,
+         "id": "COMP-047",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Motor power #1",
+         "type": "exact",
+         "expected": 1,
+         "unit": "HP",
+         "mandatory": true,
+         "id": "COMP-048",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Motor speed #1",
+         "type": "exact",
+         "expected": 1440,
+         "unit": "RPM",
+         "mandatory": true,
+         "id": "COMP-049",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Motor serial no. #1",
+         "type": "text",
+         "mandatory": true,
+         "evidence": true,
+         "hint": "Photo of nameplate",
+         "id": "COMP-050",
+         "critical": false
+        },
+        {
+         "label": "Motor voltage #1",
+         "type": "exact",
+         "expected": 415,
+         "unit": "V",
+         "mandatory": true,
+         "id": "COMP-051",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Motor insulation class #1",
+         "type": "exact",
+         "expected": "F",
+         "unit": "",
+         "mandatory": true,
+         "id": "COMP-052",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Motor rating #1",
+         "type": "exact",
+         "expected": 0.75,
+         "unit": "kW",
+         "mandatory": true,
+         "id": "COMP-053",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Motor efficiency grade #1",
+         "type": "select",
+         "options": [
+          "IE2",
+          "IE3"
+         ],
+         "accept": [
+          "IE2",
+          "IE3"
+         ],
+         "mandatory": true,
+         "id": "COMP-054",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box W63/12 #2",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-055",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box make #2",
+         "type": "select",
+         "options": [
+          "Bonfiglioli",
+          "Super Sales"
+         ],
+         "accept": [
+          "Bonfiglioli",
+          "Super Sales"
+         ],
+         "mandatory": true,
+         "id": "COMP-056",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box ratio #2",
+         "type": "exact",
+         "expected": "12:1",
+         "unit": "",
+         "mandatory": true,
+         "id": "COMP-057",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box type #2",
+         "type": "exact",
+         "expected": "W63",
+         "unit": "",
+         "mandatory": true,
+         "id": "COMP-058",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box code #2",
+         "type": "text",
+         "mandatory": false,
+         "id": "COMP-059",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box mount #2",
+         "type": "text",
+         "mandatory": false,
+         "id": "COMP-060",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box batch #2",
+         "type": "text",
+         "mandatory": false,
+         "id": "COMP-061",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box run out #2",
+         "type": "range",
+         "min": 0,
+         "max": 0.02,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "COMP-062",
+         "evidence": false
+        },
+        {
+         "label": "Motor 1 HP, 1440 RPM, flange mounting #2",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-063",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Motor make #2",
+         "type": "select",
+         "options": [
+          "Dharani",
+          "ABB",
+          "Siemens"
+         ],
+         "accept": [
+          "Dharani",
+          "ABB",
+          "Siemens"
+         ],
+         "mandatory": true,
+         "id": "COMP-064",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Motor power #2",
+         "type": "exact",
+         "expected": 1,
+         "unit": "HP",
+         "mandatory": true,
+         "id": "COMP-065",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Motor speed #2",
+         "type": "exact",
+         "expected": 1440,
+         "unit": "RPM",
+         "mandatory": true,
+         "id": "COMP-066",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Motor serial no. #2",
+         "type": "text",
+         "mandatory": true,
+         "evidence": true,
+         "hint": "Photo of nameplate",
+         "id": "COMP-067",
+         "critical": false
+        },
+        {
+         "label": "Motor voltage #2",
+         "type": "exact",
+         "expected": 415,
+         "unit": "V",
+         "mandatory": true,
+         "id": "COMP-068",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Motor insulation class #2",
+         "type": "exact",
+         "expected": "F",
+         "unit": "",
+         "mandatory": true,
+         "id": "COMP-069",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Motor rating #2",
+         "type": "exact",
+         "expected": 0.75,
+         "unit": "kW",
+         "mandatory": true,
+         "id": "COMP-070",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Motor efficiency grade #2",
+         "type": "select",
+         "options": [
+          "IE2",
+          "IE3"
+         ],
+         "accept": [
+          "IE2",
+          "IE3"
+         ],
+         "mandatory": true,
+         "id": "COMP-071",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      },
+      {
+       "name": "Chuck",
+       "params": [
+        {
+         "label": "Make",
+         "type": "exact",
+         "expected": "Shasons",
+         "unit": "",
+         "mandatory": true,
+         "id": "COMP-072",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Size",
+         "type": "exact",
+         "expected": 10,
+         "unit": "in",
+         "mandatory": true,
+         "id": "COMP-073",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Jaws",
+         "type": "exact",
+         "expected": 4,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "COMP-074",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "code": "ASSY",
+     "name": "Assembly checks",
+     "sections": [
+      {
+       "name": "Assembly checking parameters",
+       "params": [
+        {
+         "label": "Gear matching assembly",
+         "type": "pass_fail",
+         "criteria": "No projection",
+         "mandatory": true,
+         "id": "ASSY-001",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Lead screw rod assembly",
+         "type": "pass_fail",
+         "criteria": "Backlash nut with spring fitted",
+         "mandatory": true,
+         "id": "ASSY-002",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Gear box and motor assembly",
+         "type": "pass_fail",
+         "criteria": "Horizontal fitting",
+         "mandatory": true,
+         "id": "ASSY-003",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Head stock — oil leakage",
+         "type": "pass_fail",
+         "criteria": "No oil leakage",
+         "mandatory": true,
+         "critical": true,
+         "id": "ASSY-004",
+         "evidence": false
+        },
+        {
+         "label": "Head stock — dowel pins",
+         "type": "pass_fail",
+         "criteria": "Dowel pins fitted",
+         "mandatory": true,
+         "id": "ASSY-005",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Head stock — bolts",
+         "type": "pass_fail",
+         "criteria": "HT bolts used",
+         "mandatory": true,
+         "id": "ASSY-006",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Saddle cross slide assembly",
+         "type": "pass_fail",
+         "criteria": "Free manual movement",
+         "mandatory": true,
+         "id": "ASSY-007",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Three roller support assembly",
+         "type": "pass_fail",
+         "criteria": "Bearings fitted to correct tightness, rotate freely",
+         "mandatory": true,
+         "id": "ASSY-008",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Control panel phase indicator",
+         "type": "pass_fail",
+         "criteria": "Phase indicator and contactor function",
+         "mandatory": true,
+         "id": "ASSY-009",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Indexing assembly",
+         "type": "pass_fail",
+         "criteria": "Chuck done with 2 pins — 100, 80, 70, 60, 50",
+         "mandatory": true,
+         "id": "ASSY-010",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Quality of milling",
+         "type": "pass_fail",
+         "criteria": "No vibration",
+         "mandatory": true,
+         "critical": true,
+         "evidence": true,
+         "hint": "Photo/video of trial cut",
+         "id": "ASSY-011"
+        },
+        {
+         "label": "Cross slide screw rod and nut",
+         "type": "pass_fail",
+         "criteria": "Lubrication provision present",
+         "mandatory": true,
+         "id": "ASSY-012",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "code": "ALGN",
+     "name": "Alignment",
+     "sections": [
+      {
+       "name": "Head stock alignment",
+       "params": [
+        {
+         "label": "Head stock — horizontal",
+         "type": "range",
+         "min": 0,
+         "max": 0.05,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "ALGN-001",
+         "evidence": false
+        },
+        {
+         "label": "Head stock — vertical",
+         "type": "range",
+         "min": 0,
+         "max": 0.05,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "ALGN-002",
+         "evidence": false
+        },
+        {
+         "label": "Head stock to three roller support — horizontal",
+         "type": "range",
+         "min": 0,
+         "max": 0.05,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "ALGN-003",
+         "evidence": false
+        },
+        {
+         "label": "Head stock to three roller support — vertical",
+         "type": "range",
+         "min": 0,
+         "max": 0.05,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "ALGN-004",
+         "evidence": false
+        },
+        {
+         "label": "Three roller supports — tail end",
+         "type": "range",
+         "min": 0,
+         "max": 0.05,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "tbc": true,
+         "id": "ALGN-005",
+         "evidence": false
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "code": "TOL",
+     "name": "Tolerance inspection",
+     "sections": [
+      {
+       "name": "Tolerance details",
+       "params": [
+        {
+         "label": "Top plate — run out / face out",
+         "type": "range",
+         "min": 0,
+         "max": 0.05,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-001",
+         "evidence": false
+        },
+        {
+         "label": "Guide plate — run out / face out",
+         "type": "range",
+         "min": 0,
+         "max": 0.05,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-002",
+         "evidence": false
+        },
+        {
+         "label": "Index plate — run out / face out",
+         "type": "range",
+         "min": 0,
+         "max": 0.05,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-003",
+         "evidence": false
+        },
+        {
+         "label": "Lead screw rod — bend",
+         "type": "range",
+         "min": 0,
+         "max": 0.4,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-004",
+         "evidence": false
+        },
+        {
+         "label": "Main drive gear box — temperature",
+         "type": "range",
+         "min": 35,
+         "max": 50,
+         "unit": "°C",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-005",
+         "evidence": false
+        },
+        {
+         "label": "Taper, three roller support to head stock (H & V)",
+         "type": "range",
+         "min": 0,
+         "max": 0.05,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-006",
+         "evidence": false
+        },
+        {
+         "label": "Worm wheel shaft — run out",
+         "type": "range",
+         "min": 0,
+         "max": 0.03,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-007",
+         "evidence": false
+        },
+        {
+         "label": "Main lead screw rod with nut — axial play",
+         "type": "range",
+         "min": 0,
+         "max": 0.1,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-008",
+         "evidence": false
+        },
+        {
+         "label": "Cross slide screw rod with nut — axial play",
+         "type": "range",
+         "min": 0,
+         "max": 0.1,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-009",
+         "evidence": false
+        },
+        {
+         "label": "Cutter drive shaft — run out",
+         "type": "range",
+         "min": 0,
+         "max": 0.03,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-010",
+         "evidence": false
+        },
+        {
+         "label": "Cutter gear box — no-load temperature",
+         "type": "range",
+         "min": 0,
+         "max": 35,
+         "unit": "°C",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-011",
+         "evidence": false
+        },
+        {
+         "label": "Cutter drive housing to gear box — clearance",
+         "type": "range",
+         "min": 0,
+         "max": 0.05,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-012",
+         "evidence": false
+        },
+        {
+         "label": "Worm shaft and wheel assembly — run out",
+         "type": "range",
+         "min": 0,
+         "max": 0.05,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-013",
+         "evidence": false
+        },
+        {
+         "label": "Linear guide and bearing block — fitment",
+         "type": "pass_fail",
+         "criteria": "No shake",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-014",
+         "evidence": false
+        },
+        {
+         "label": "Index arm mounting bracket — position and weld",
+         "type": "range",
+         "min": 89.5,
+         "max": 90.5,
+         "unit": "deg",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-015",
+         "evidence": false
+        },
+        {
+         "label": "Top shaft — axial play",
+         "type": "range",
+         "min": 0,
+         "max": 0.1,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-016",
+         "evidence": false
+        },
+        {
+         "label": "Bottom shaft — axial play",
+         "type": "range",
+         "min": 0,
+         "max": 0.1,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-017",
+         "evidence": false
+        },
+        {
+         "label": "Worm wheel and worm shaft — centre distance",
+         "type": "range",
+         "min": 101.5,
+         "max": 101.85,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "tbc": true,
+         "id": "TOL-018",
+         "evidence": false
+        },
+        {
+         "label": "Main spindle — run out",
+         "type": "range",
+         "min": 0,
+         "max": 0.03,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-019",
+         "evidence": false
+        },
+        {
+         "label": "Head stock holes — centre distance deviation",
+         "type": "range",
+         "min": -0.2,
+         "max": 0.2,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-020",
+         "evidence": false
+        },
+        {
+         "label": "Plunger pin — ovality",
+         "type": "range",
+         "min": 0,
+         "max": 0.02,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-021",
+         "evidence": false
+        },
+        {
+         "label": "Linear slide on the bed — alignment",
+         "type": "range",
+         "min": 0,
+         "max": 0.03,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-022",
+         "evidence": false
+        },
+        {
+         "label": "Synchronous motor — winding resistance",
+         "type": "range",
+         "min": 185,
+         "max": 205,
+         "unit": "Ω",
+         "mandatory": true,
+         "critical": true,
+         "tbc": true,
+         "id": "TOL-023",
+         "evidence": false
+        },
+        {
+         "label": "Chuck — run out and face out",
+         "type": "range",
+         "min": 0,
+         "max": 0.04,
+         "unit": "mm",
+         "mandatory": true,
+         "critical": true,
+         "id": "TOL-024",
+         "evidence": false
+        },
+        {
+         "label": "Coolant pump — temperature",
+         "type": "range",
+         "min": 0,
+         "max": 50,
+         "unit": "°C",
+         "mandatory": true,
+         "id": "TOL-025",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "code": "ELEC",
+     "name": "Control panel and electrical",
+     "sections": [
+      {
+       "name": "Inside control panel",
+       "params": [
+        {
+         "label": "Contactor rating",
+         "type": "range",
+         "min": 9,
+         "max": 12,
+         "unit": "A",
+         "mandatory": true,
+         "id": "ELEC-001",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "SMPS provided",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "ELEC-002",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "MPCB rating",
+         "type": "range",
+         "min": 1.6,
+         "max": 2.64,
+         "unit": "A",
+         "mandatory": true,
+         "id": "ELEC-003",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "AC variator manual provided",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "ELEC-004",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Laminated wiring diagram and manual book",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "ELEC-005",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Warning note pasted",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "ELEC-006",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Indicator bulbs functioning",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "ELEC-007",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Counter functioning",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "ELEC-008",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Power failure and restart tested",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "critical": true,
+         "evidence": true,
+         "hint": "Video of restart test",
+         "id": "ELEC-009"
+        },
+        {
+         "label": "Panel board make",
+         "type": "text",
+         "mandatory": true,
+         "id": "ELEC-010",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Panel board serial no.",
+         "type": "text",
+         "mandatory": true,
+         "id": "ELEC-011",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Drawing no.",
+         "type": "text",
+         "mandatory": true,
+         "id": "ELEC-012",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Month / year",
+         "type": "text",
+         "mandatory": true,
+         "id": "ELEC-013",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      },
+      {
+       "name": "Milling machine electrical testing",
+       "params": [
+        {
+         "label": "MPCB 1.4–2.3 A — rating test",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-014",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "MPCB 0.3–0.6 A — rating test",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-015",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "AC drive 2 HP",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-016",
+         "critical": false,
+         "evidence": false,
+         "applies": [
+          "Automatic"
+         ]
+        },
+        {
+         "label": "2 C/O relay 24 V DC (6 nos)",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-017",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "12 A contactor (5 nos)",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-018",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "415 V incoming",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-019",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "24 V AC transformer — incoming",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-020",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "13 R/F — outgoing",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-021",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Transformer 415/230/24 V AC, 100+50+150 VA — rating test",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-022",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Ø18 mm NPN sensor",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-023",
+         "critical": false,
+         "evidence": false,
+         "applies": [
+          "Automatic"
+         ]
+        },
+        {
+         "label": "MCB 20 A 4P — incoming",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-024",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "MCB 10 A 3P — 2 HP AC drive incoming",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-025",
+         "critical": false,
+         "evidence": false,
+         "applies": [
+          "Automatic"
+         ]
+        },
+        {
+         "label": "MCB 6 A 2P — 240 V AC incoming",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-026",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "MCB 6 A 2P — 24 V AC incoming",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "ELEC-027",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "code": "FIN",
+     "name": "Safety, finish and coolant",
+     "sections": [
+      {
+       "name": "Safety guards",
+       "params": [
+        {
+         "label": "Head stock gear drive guard (1 no)",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "critical": true,
+         "id": "FIN-001",
+         "evidence": false
+        },
+        {
+         "label": "Quality of chip tray (1 no)",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "FIN-002",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      },
+      {
+       "name": "Finish",
+       "params": [
+        {
+         "label": "General finish",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "FIN-003",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Painting",
+         "type": "pass_fail",
+         "criteria": "",
+         "mandatory": true,
+         "id": "FIN-004",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      },
+      {
+       "name": "Coolant pump",
+       "params": [
+        {
+         "label": "Machine no.",
+         "type": "text",
+         "mandatory": true,
+         "id": "FIN-005",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Power",
+         "type": "exact",
+         "expected": 0.1,
+         "unit": "kW",
+         "mandatory": true,
+         "id": "FIN-006",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Voltage",
+         "type": "exact",
+         "expected": 230,
+         "unit": "V",
+         "mandatory": true,
+         "id": "FIN-007",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Speed",
+         "type": "exact",
+         "expected": 2800,
+         "unit": "RPM",
+         "mandatory": true,
+         "id": "FIN-008",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Make",
+         "type": "exact",
+         "expected": "Stark",
+         "unit": "",
+         "mandatory": true,
+         "id": "FIN-009",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Coolant pump runs on saddle forward movement",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "FIN-010",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "code": "TOOLS",
+     "name": "Tools and accessories",
+     "sections": [
+      {
+       "name": "Tools list",
+       "params": [
+        {
+         "label": "Foundation bolt M12 × 300",
+         "type": "qty",
+         "expected": 8,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-001",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Collar Ø55",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-002",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Hardened sleeve Ø65",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-003",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Chuck key",
+         "type": "qty",
+         "expected": 2,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-004",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Plunger pin",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-005",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Tool kit",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-006",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Small pipe hose",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-007",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Clamp (small hose)",
+         "type": "qty",
+         "expected": 2,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-008",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Big pipe hose",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-009",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Clamp (big hose)",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-010",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Handle and lever",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-011",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Chuck shoe",
+         "type": "qty",
+         "expected": 2,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-012",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "SS tray",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-013",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "MS tray",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": true,
+         "id": "TOOLS-014",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      },
+      {
+       "name": "Tool kit contents",
+       "params": [
+        {
+         "label": "Double end spanner 10×11",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-015",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Double end spanner 12×13",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-016",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Double end spanner 17×19",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-017",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Double end spanner 24×26",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-018",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Double end spanner 32×36",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-019",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Ring spanner 17×19",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-020",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Ring spanner 24×26",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-021",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Allen key 4 mm",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-022",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Allen key 5 mm",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-023",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Allen key 6 mm",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-024",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Allen key 8 mm",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-025",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Allen key 10 mm",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-026",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Lever type grease can",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-027",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Oil can",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-028",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Bearing NJ 205",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-029",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Coolant hose",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-030",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "On/off valve",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-031",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Coolant hose holder",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-032",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Star knob",
+         "type": "yes_no",
+         "expected": "Yes",
+         "mandatory": true,
+         "id": "TOOLS-033",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      },
+      {
+       "name": "Optional items",
+       "params": [
+        {
+         "label": "Collar Ø60",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": false,
+         "id": "TOOLS-034",
+         "critical": false,
+         "evidence": false
+        },
+        {
+         "label": "Collar Ø70",
+         "type": "qty",
+         "expected": 1,
+         "unit": "nos",
+         "mandatory": false,
+         "id": "TOOLS-035",
+         "critical": false,
+         "evidence": false
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "variant_field": "Machine type"
+  }
+ ],
+ "_variant_note": "Params with 'applies' are shown/evaluated only when the inspection's variant (header 'Machine type') is in the list. ELEC-016/023/025 (AC drive, NPN sensor, drive MCB) set to Automatic as a DEMO of variant logic — Engineering to confirm the real variant mapping."
+}

@@ -1,0 +1,62 @@
+# Development stack for TIGL Quality. Production: see docker-compose.prod.yml
+# Usage: cp .env.example .env && docker compose up -d
+name: tigl-qc
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: tigl_qc
+      POSTGRES_USER: qc
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-qc_local_only}
+    ports: ["5432:5432"]
+    volumes:
+      - pg:/var/lib/postgresql/data
+      - ../db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck: {test: ["CMD-SHELL", "pg_isready -U qc -d tigl_qc"], interval: 5s, retries: 10}
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+  gotenberg:            # HTML -> PDF for signed reports
+    image: gotenberg/gotenberg:8
+    ports: ["3001:3000"]
+  minio:                # evidence + sealed PDFs (S3-compatible, same as prod)
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment: {MINIO_ROOT_USER: qc, MINIO_ROOT_PASSWORD: qc_local_only}
+    ports: ["9000:9000", "9001:9001"]
+    volumes: [minio:/data]
+  mailpit:              # catches all SMTP mail locally (UI on :8025)
+    image: axllent/mailpit:latest
+    ports: ["1025:1025", "8025:8025"]
+  clamav:
+    image: clamav/clamav:stable
+    ports: ["3310:3310"]
+  odoo-db:              # optional sandbox Odoo for integration work: --profile odoo
+    image: postgres:16-alpine
+    profiles: ["odoo"]
+    environment: {POSTGRES_DB: postgres, POSTGRES_USER: odoo, POSTGRES_PASSWORD: odoo}
+    volumes: [odoo-pg:/var/lib/postgresql/data]
+  odoo:
+    image: odoo:17.0     # match prod version (decision D1)
+    profiles: ["odoo"]
+    depends_on: [odoo-db]
+    environment: {HOST: odoo-db, USER: odoo, PASSWORD: odoo}
+    ports: ["8069:8069"]
+  api:
+    build: {context: .., dockerfile: apps/api/Dockerfile}
+    profiles: ["app"]
+    env_file: .env
+    depends_on: {db: {condition: service_healthy}, redis: {condition: service_started}}
+    ports: ["4000:4000"]
+  worker:
+    build: {context: .., dockerfile: apps/worker/Dockerfile}
+    profiles: ["app"]
+    env_file: .env
+    depends_on: [api, redis, gotenberg]
+  web:
+    build: {context: .., dockerfile: apps/web/Dockerfile}
+    profiles: ["app"]
+    env_file: .env
+    depends_on: [api]
+    ports: ["3000:3000"]
+volumes: {pg: {}, minio: {}, odoo-pg: {}}

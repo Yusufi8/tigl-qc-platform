@@ -1,0 +1,55 @@
+# TIGL Quality — PRODUCTION on TIGL's own Linux server (Ubuntu 24.04 LTS recommended)
+# Usage: docker compose -f docker-compose.prod.yml --env-file /etc/tigl-qc/.env up -d
+# Only Caddy is published on the LAN (443). Everything else stays on the internal network.
+name: tigl-qc-prod
+x-restart: &restart {restart: unless-stopped}
+networks: {internal: {internal: true}, edge: {}}
+services:
+  caddy:
+    <<: *restart
+    image: caddy:2
+    ports: ["443:443", "80:80"]
+    volumes: [./Caddyfile:/etc/caddy/Caddyfile:ro, caddy_data:/data, /etc/tigl-qc/tls:/tls:ro]   # internal-CA or public cert in /tls
+    networks: [edge, internal]
+    depends_on: [web, api]
+  web:
+    <<: *restart
+    image: registry.tiglobal.local/tigl-qc/web:${RELEASE}
+    env_file: /etc/tigl-qc/.env
+    networks: [internal]
+  api:
+    <<: *restart
+    image: registry.tiglobal.local/tigl-qc/api:${RELEASE}
+    env_file: /etc/tigl-qc/.env
+    networks: [internal]
+    depends_on: {db: {condition: service_healthy}, redis: {condition: service_started}, minio: {condition: service_started}}
+  worker:
+    <<: *restart
+    image: registry.tiglobal.local/tigl-qc/worker:${RELEASE}
+    env_file: /etc/tigl-qc/.env
+    networks: [internal, edge]          # edge only for SMTP / Odoo egress
+    depends_on: [api, gotenberg, clamav]
+  db:
+    <<: *restart
+    image: postgres:16-alpine
+    environment: {POSTGRES_DB: tigl_qc, POSTGRES_USER: qc, POSTGRES_PASSWORD_FILE: /run/secrets/db_password}
+    secrets: [db_password]
+    volumes: [pg:/var/lib/postgresql/data]       # put on LUKS-encrypted volume
+    networks: [internal]
+    healthcheck: {test: ["CMD-SHELL", "pg_isready -U qc -d tigl_qc"], interval: 10s, retries: 10}
+  redis: {<<: *restart, image: "redis:7-alpine", command: ["redis-server","--appendonly","yes"], volumes: ["redis:/data"], networks: [internal]}
+  minio:
+    <<: *restart
+    image: minio/minio:latest
+    command: server /data
+    environment: {MINIO_ROOT_USER_FILE: /run/secrets/minio_user, MINIO_ROOT_PASSWORD_FILE: /run/secrets/minio_pass}
+    secrets: [minio_user, minio_pass]
+    volumes: [minio:/data]                       # LUKS volume; nightly sync to second host
+    networks: [internal]
+  gotenberg: {<<: *restart, image: "gotenberg/gotenberg:8", networks: [internal]}
+  clamav: {<<: *restart, image: "clamav/clamav:stable", networks: [internal]}
+volumes: {pg: {}, redis: {}, minio: {}, caddy_data: {}}
+secrets:
+  db_password: {file: /etc/tigl-qc/secrets/db_password}
+  minio_user: {file: /etc/tigl-qc/secrets/minio_user}
+  minio_pass: {file: /etc/tigl-qc/secrets/minio_pass}

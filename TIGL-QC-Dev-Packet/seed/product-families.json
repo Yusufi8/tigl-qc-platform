@@ -1,0 +1,42 @@
+{
+  "_note": "Product family catalogue for template authoring. Stage blueprints are STRUCTURE ONLY. No tolerances/specs are defined here: every parameter must come from an Engineering-controlled checklist (as AXIS came from Axis_Final.xls) and be published by the Quality Manager. Sources: tiglobal.com, globaldryers.com, coconutmachineryindia.com product listings.",
+  "inspection_types": [
+    {"code": "IPQC", "name": "In-process inspection", "where": "Factory", "when": "During fabrication / sub-assembly"},
+    {"code": "FQC",  "name": "Final inspection (pre-despatch)", "where": "Factory", "when": "Before despatch; releases MO in Odoo"},
+    {"code": "FAT",  "name": "Factory acceptance test", "where": "Factory, customer may witness", "when": "Dryers and lines: trial run before despatch"},
+    {"code": "SAT",  "name": "Site acceptance / commissioning", "where": "Customer site", "when": "Turnkey projects after installation; offline capture needed"}
+  ],
+  "stage_library": {
+    "COMP": "Component and bought-out verification (make, rating, qty, serial)",
+    "FAB":  "Fabrication and welding (dimensions, weld visual, DP test where specified)",
+    "SS":   "Food-contact surfaces (material grade cert, finish, weld polish, cleanability)",
+    "ASSY": "Mechanical assembly",
+    "ALGN": "Alignment (shafts, sprockets, belt/apron/band tracking)",
+    "HEAT": "Heating system (radiator/heat exchanger, burner/HAG, thermic fluid or steam circuit)",
+    "PRES": "Pressure and leak tests (hydrostatic / pneumatic / refrigerant)",
+    "AIR":  "Air system (blowers, dampers, airflow/static pressure)",
+    "VIB":  "Vibration drive (motors, springs, amplitude, frequency)",
+    "REFR": "Refrigeration circuit (heat pump)",
+    "ELEC": "Electrical and controls (panel, IR, earthing, interlocks, PLC/HMI, VFD)",
+    "RUN":  "Trial run / performance (no-load, load, temperature profile, throughput)",
+    "SAFE": "Safety (guards, e-stops, interlocks, labelling)",
+    "FIN":  "Finish, painting, packing, marking",
+    "DOCS": "Documents and tools kit (manuals, certificates, spares, tools list)",
+    "TOOLS":"Tools / kit list (as AXIS Sheet3)",
+    "TOL":  "Geometric tolerances (as AXIS Sheet4)",
+    "LINE": "Line integration (interfaces between machines, conveyor transfer, sequencing)"
+  },
+  "families": [
+    {"code": "AXIS",   "name": "AXIS Milling Machine (MM / Twin Milling Head)", "category": "Machine", "status": "digitised", "templates": ["AXIS-MM", "AXIS-TMH"], "inspection_types": ["FQC"], "stages": ["COMP","ASSY","ALGN","TOL","ELEC","FIN","TOOLS"]},
+    {"code": "APRON",  "name": "Apron Band Dryer (2/3-stage)", "category": "Dryer", "status": "awaiting_checklist", "inspection_types": ["IPQC","FQC","FAT","SAT"], "stages": ["COMP","FAB","SS","ASSY","ALGN","HEAT","AIR","ELEC","SAFE","RUN","FIN","DOCS"]},
+    {"code": "MPBAND", "name": "Multipass Band Dryer (incl. Questy)", "category": "Dryer", "status": "awaiting_checklist", "inspection_types": ["IPQC","FQC","FAT","SAT"], "stages": ["COMP","FAB","SS","ASSY","ALGN","HEAT","AIR","ELEC","SAFE","RUN","FIN","DOCS"]},
+    {"code": "VIBNEO", "name": "Vibratory Fluidized Bed Dryer (VIBRANTneo / Everest 405)", "category": "Dryer", "status": "awaiting_checklist", "inspection_types": ["IPQC","FQC","FAT","SAT"], "stages": ["COMP","FAB","SS","ASSY","VIB","HEAT","AIR","ELEC","SAFE","RUN","FIN","DOCS"]},
+    {"code": "CONQ",   "name": "Coconut Conquest Dryer", "category": "Dryer", "status": "awaiting_checklist", "inspection_types": ["IPQC","FQC","FAT","SAT"], "stages": ["COMP","FAB","SS","ASSY","ALGN","HEAT","AIR","ELEC","SAFE","RUN","FIN","DOCS"]},
+    {"code": "DUAL",   "name": "Dual-Stage / Combination Dryer", "category": "Dryer", "status": "awaiting_checklist", "inspection_types": ["IPQC","FQC","FAT","SAT"], "stages": ["COMP","FAB","SS","ASSY","ALGN","HEAT","AIR","ELEC","SAFE","RUN","FIN","DOCS"]},
+    {"code": "HPD",    "name": "Heat Pump Dryer", "category": "Dryer", "status": "awaiting_checklist", "inspection_types": ["FQC","FAT","SAT"], "stages": ["COMP","FAB","ASSY","REFR","PRES","AIR","ELEC","SAFE","RUN","FIN","DOCS"]},
+    {"code": "RAD",    "name": "Steam / Thermic Fluid Radiator", "category": "Heat exchanger", "status": "awaiting_checklist", "inspection_types": ["FQC"], "stages": ["COMP","FAB","PRES","FIN","DOCS"]},
+    {"code": "HAG",    "name": "Hot Air Generator (direct-fired / thermic fluid heater)", "category": "Heat source", "status": "awaiting_checklist", "inspection_types": ["FQC","FAT","SAT"], "stages": ["COMP","FAB","PRES","ELEC","SAFE","RUN","FIN","DOCS"]},
+    {"code": "PREP",   "name": "Preparatory / washing / cutting / conveying equipment", "category": "Machine", "status": "awaiting_checklist", "inspection_types": ["FQC"], "stages": ["COMP","FAB","SS","ASSY","ELEC","SAFE","RUN","FIN","DOCS"]},
+    {"code": "COCOLINE","name": "Complete Coconut Processing Line (turnkey)", "category": "Line / project", "status": "awaiting_checklist", "inspection_types": ["FAT","SAT"], "stages": ["LINE","ELEC","SAFE","RUN","DOCS"], "notes": "Line-level inspection references each machine's own FQC/FAT record (parent-child). Project = Odoo project + multiple MOs."}
+  ]
+}

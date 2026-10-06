@@ -1,0 +1,8 @@
+# qc.tiglobal.com — internal DNS A record -> this server's LAN IP
+qc.tiglobal.com {
+  tls /tls/qc.crt /tls/qc.key          # internal-CA or public cert; or: tls { dns <provider> } for Let's Encrypt DNS-01
+  encode zstd gzip
+  header { Strict-Transport-Security "max-age=31536000"; X-Content-Type-Options nosniff; X-Frame-Options DENY; Referrer-Policy same-origin }
+  handle /api/* { reverse_proxy api:4000 }
+  handle { reverse_proxy web:3000 }
+}

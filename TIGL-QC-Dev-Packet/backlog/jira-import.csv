@@ -1,0 +1,66 @@
+Issue Type,Summary,Description,Epic Name,Epic Link,Story Points,Labels,Priority
+Epic,Platform core,"Shell, module registry, local accounts, RBAC, entities/customers, audit, settings",QC-E1,,,qc-platform,Medium
+Story,"Monorepo, CI/CD, private registry, Compose dev + prod stacks",See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E1,3,qc-platform,Medium
+Story,"Local login: username + password, Argon2id, session, lockout, idle timeout",See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E1,5,qc-platform,Medium
+Story,Admin: create user + role + temporary password; forced change at first login; admin reset,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E1,5,qc-platform,Medium
+Story,Optional built-in TOTP 2FA,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E1,3,qc-platform,Medium
+Story,App shell + module registry + per-module toggles,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E1,5,qc-platform,Medium
+Story,"RBAC: roles, permissions, matrix UI, LOCKED guardrails (API + DB trigger), insp.add_check",See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E1,5,qc-platform,Medium
+Story,"Entities, customers (issuing entity per customer), company_id + RLS",See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E1,5,qc-platform,Medium
+Story,Append-only audit_event with hash chain + nightly verify,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E1,3,qc-platform,Medium
+Story,"System settings: branding, numbering per entity, retention, signature slots",See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E1,3,qc-platform,Medium
+Epic,"Templates, machines and validation engine","Revisioned templates, variants, add-machine, AXIS seed import, deterministic engine",QC-E2,,,qc-platform,Medium
+Story,Template/revision/stage/section/param schema with variants (applies_to) + API,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E2,5,qc-platform,High
+Story,"Add machine: blank/blueprint, copy, import XLSX/JSON",See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E2,5,qc-platform,High
+Story,"Import seed/axis_templates.json (AXIS-MM, AXIS-TMH)",See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E2,2,qc-platform,High
+Story,"packages/engine incl. effective checklist (variants + extra params), 100% coverage",See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E2,5,qc-platform,High
+Story,"Template editor: add/edit/remove checks, stages, sections, variants, spec TBC",See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E2,5,qc-platform,High
+Story,Field-level diff + QM publish; immutable published revision trigger,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E2,3,qc-platform,High
+Epic,Inspections and NCR,"Create, runner, order-specific checks, evidence, workflow, NCR",QC-E3,,,qc-platform,Medium
+Story,"New inspection: customer to issuing entity, variant, header, numbering",See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E3,3,qc-platform,Medium
+Story,"Runner: stages, typed inputs, live engine result, tolerance gauge",See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E3,8,qc-platform,Medium
+Story,"Order-specific checks (QM/Engineering, reason, notify QM, hash-bound)",See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E3,5,qc-platform,Medium
+Story,Evidence upload to MinIO + AV scan + signed URLs,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E3,5,qc-platform,Medium
+Story,Remarks per param,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E3,1,qc-platform,Medium
+Story,Workflow transitions with guards (submit/review/approve/concession/return/reject),See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E3,5,qc-platform,Medium
+Story,Signed-record lock (409) + return voids signatures,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E3,3,qc-platform,Medium
+Story,Auto-NCR on critical FAIL; NCR disposition + close,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E3,5,qc-platform,Medium
+Story,Re-inspection linked to parent; approvals queue,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E3,3,qc-platform,Medium
+Epic,Reports and built-in e-signature,"Report view, sign, password re-auth, hash, per-entity certificates, PAdES seal, PDF lock",QC-E4,,,qc-platform,Medium
+Story,Report view with entity letterhead/address,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E4,3,qc-platform,High
+Story,"E-sign dialog: type/initials, designation, styles, intent",See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E4,5,qc-platform,High
+Story,"Password re-auth token (120 s, single use) + signing lockout",See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E4,3,qc-platform,High
+Story,"Per-entity certificates: generate from internal CA, upload .p12, rotation, expiry alerts",See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E4,8,qc-platform,High
+Story,JCS canonical hash + signature table + revocation,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E4,3,qc-platform,High
+Story,PDF render (Gotenberg) + manifest + PAdES seal + verify page/QR,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E4,8,qc-platform,High
+Story,423 lock on PDF endpoint + print CSS block,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E4,2,qc-platform,High
+Epic,Integrations,"Odoo, SMTP, REST API, webhooks, Dev console, optional Google Drive/Sheets",QC-E5,,,qc-platform,Medium
+Story,Odoo adapter (JSON-RPC/JSON-2) + connection test,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E5,5,qc-platform,Medium
+Story,Pull MO/SO/product/lot on create (SO company to issuing entity),See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E5,3,qc-platform,Medium
+Story,"Push x_qc_result, PDF attachment, chatter via outbox",See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E5,5,qc-platform,Medium
+Story,Odoo reconciliation job + error queue,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E5,3,qc-platform,Medium
+Story,"SMTP config, test email, MJML templates, event toggles",See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E5,3,qc-platform,Medium
+Story,Scoped API keys + rate limits,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E5,3,qc-platform,Medium
+Story,HMAC-signed webhooks + retries,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E5,3,qc-platform,Medium
+Story,"Developer console: sandbox API explorer, flags, health",See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E5,3,qc-platform,Medium
+Story,Optional Google Drive archive / Sheets export,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E5,2,qc-platform,Medium
+Epic,"Dashboard, hosting and hardening","Dashboard, on-prem deployment, security, performance, backups, runbooks",QC-E6,,,qc-platform,Medium
+Story,"Dashboard: FPY, queue, holds, NCRs, weekly trend, top failures",See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E6,5,qc-platform,Medium
+Story,IT dashboard: service health only,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E6,2,qc-platform,Medium
+Story,"On-prem deployment: server, internal DNS, TLS (internal CA), Caddy",See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E6,5,qc-platform,Medium
+Story,ZAP + pen-test fixes,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E6,5,qc-platform,Medium
+Story,k6 performance tuning,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E6,3,qc-platform,Medium
+Story,"Backups: PG PITR, MinIO sync, signing key escrow + restore drill",See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E6,5,qc-platform,Medium
+Story,"Runbooks: deploy, rollback, Odoo outage, SMTP outage, lost signing key",See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E6,2,qc-platform,Medium
+Epic,"UAT, pilot and go-live","Shadow mode on AXIS, sign-off",QC-E7,,,qc-platform,Medium
+Story,UAT scripts with QC team on tablets,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E7,3,qc-platform,Medium
+Story,2-week shadow mode on 5 AXIS machines,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E7,5,qc-platform,Medium
+Story,Engineering confirms TBC specs + variant mapping; publish AXIS-MM rev C,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E7,2,qc-platform,Medium
+Story,Go-live + hypercare,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E7,3,qc-platform,Medium
+Epic,Product family rollout,"Dryers, radiators, HAG, coconut lines, FAT/SAT, offline",QC-E8,,,qc-platform,Medium
+Story,Product family entity + filters (FAM-01),See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E8,3,qc-platform,Medium
+Story,Inspection types + per-type signature slots (FAM-02),See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E8,3,qc-platform,Medium
+Story,Line/project parent-child inspections (FAM-03),See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E8,5,qc-platform,Medium
+Story,Series param type for trial runs (FAM-04),See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E8,5,qc-platform,Medium
+Story,Offline PWA capture for SAT (FAM-05),See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E8,8,qc-platform,Medium
+Story,Digitise first dryer family checklist,See TIGL QC dev packet; acceptance criteria in docs/01 and docs/08.,,QC-E8,3,qc-platform,Medium

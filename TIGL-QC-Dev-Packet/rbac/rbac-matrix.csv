@@ -1,0 +1,21 @@
+permission,description,inspector,supervisor,qm,engineering,production,management,sysadmin,developer
+dashboard.view,View dashboard,Y,Y,Y,Y,Y,Y,Y,
+insp.view,View inspections,Y,Y,Y,Y,Y,Y,,
+insp.create,Create inspections,Y,Y,,,,,,
+insp.execute,Record results,Y,Y,,,,,,
+insp.review,Review (supervisor),,Y,Y,,,,,
+insp.approve,Approve / concession,LOCKED,,Y,LOCKED,,,LOCKED,LOCKED
+report.view,View reports,Y,Y,Y,Y,Y,Y,,
+report.sign,E-sign reports,Y,Y,Y,,,,LOCKED,LOCKED
+ncr.view,View NCRs,Y,Y,Y,Y,Y,Y,,
+ncr.manage,Manage NCRs,,Y,Y,,,,,
+tmpl.view,View templates,Y,Y,Y,Y,,Y,Y,Y
+tmpl.edit,Draft template revisions,,,,Y,,,,
+tmpl.publish,Publish template revisions,,,Y,,,,LOCKED,
+admin.users,Users and roles,,,,,,,Y,
+admin.config,"Modules, branding, workflow",,,,,,,Y,
+admin.integrations,Odoo / Google / SMTP,,,,,,,Y,
+admin.audit,Audit log,,,Y,,,,Y,
+dev.console,Developer console,,,,,,,,Y
+data.prod,Production QC data,Y,Y,Y,Y,Y,Y,LOCKED,LOCKED
+insp.add_check,Add order-specific checks to a draft inspection,,,Y,Y,,,LOCKED,LOCKED
