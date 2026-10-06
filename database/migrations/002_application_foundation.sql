@@ -12,7 +12,13 @@ CREATE INDEX IF NOT EXISTS app_session_user_active ON app_session(user_id, expir
 CREATE FUNCTION guard_published_revision() RETURNS trigger LANGUAGE plpgsql AS $$
 DECLARE rid uuid; st text;
 BEGIN
-  rid := CASE WHEN TG_TABLE_NAME='template_revision' THEN OLD.id ELSE COALESCE(NEW.revision_id,OLD.revision_id) END;
+  IF TG_TABLE_NAME='template_revision' THEN
+    rid := OLD.id;
+  ELSIF TG_OP='DELETE' THEN
+    rid := OLD.revision_id;
+  ELSE
+    rid := NEW.revision_id;
+  END IF;
   SELECT status INTO st FROM template_revision WHERE id=rid;
   IF TG_TABLE_NAME='template_revision' AND TG_OP='UPDATE' THEN
     IF st='published' AND OLD.status='published' AND NEW.status='superseded'
