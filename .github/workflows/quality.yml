@@ -1,0 +1,36 @@
+name: quality
+on:
+  pull_request:
+  push:
+permissions:
+  contents: read
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: tigl_qc_test
+          POSTGRES_USER: qc
+          POSTGRES_PASSWORD: qc_test_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U qc -d tigl_qc_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run typecheck
+      - name: Apply the PostgreSQL 16 schema
+        env:
+          PGPASSWORD: qc_test_password
+        run: psql -h localhost -U qc -d tigl_qc_test -v ON_ERROR_STOP=1 -f TIGL-QC-Dev-Packet/db/schema.sql

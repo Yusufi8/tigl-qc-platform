@@ -1,0 +1,24 @@
+{
+  "name": "tigl-qc-platform",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "preview": "node scripts/preview-server.mjs",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "test:engine": "vitest run packages/engine/test"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "engines": {
+    "node": ">=22 <25",
+    "npm": ">=10"
+  }
+}

@@ -4,6 +4,7 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 CREATE EXTENSION IF NOT EXISTS citext;
 
 -- ===== Core: tenancy, users, RBAC =====
+-- DDL order is intentional: referenced tables must exist before foreign keys are declared.
 -- Issuing entity rule: customer.company_id is the default; if the inspection is linked to an Odoo sale order, the SO's company wins.
 -- Machine templates are shared by both entities (they describe TIGL products); inspection.company_id is what differs.
 CREATE TABLE company (
@@ -18,16 +19,6 @@ CREATE TABLE customer (
   name citext NOT NULL UNIQUE, country text, odoo_partner_id int,
   created_at timestamptz NOT NULL DEFAULT now()
 );
-CREATE TABLE signing_certificate (                           -- built-in document sealing; one active cert per company, no external service
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  company_id text NOT NULL REFERENCES company(id),
-  subject text NOT NULL, issuer text NOT NULL, fingerprint_sha256 text NOT NULL, not_before timestamptz NOT NULL, not_after timestamptz NOT NULL,
-  cert_pem text NOT NULL,
-  key_enc bytea NOT NULL,                                    -- private key encrypted (AES-256-GCM) with the server master key; never exported, never returned by API
-  status text NOT NULL CHECK (status IN ('active','retired','revoked')) DEFAULT 'active',
-  created_by uuid REFERENCES app_user(id), created_at timestamptz NOT NULL DEFAULT now()
-);
-CREATE UNIQUE INDEX one_active_cert ON signing_certificate(company_id) WHERE status='active';
 CREATE TABLE site (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   company_id text NOT NULL REFERENCES company(id),
@@ -48,6 +39,17 @@ CREATE TABLE app_user (
   active boolean NOT NULL DEFAULT true,
   last_login_at timestamptz, created_by uuid REFERENCES app_user(id), created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now()
 );
+CREATE TABLE signing_certificate (                           -- built-in document sealing; one active cert per company, no external service
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  company_id text NOT NULL REFERENCES company(id),
+  subject text NOT NULL, issuer text NOT NULL, fingerprint_sha256 text NOT NULL, not_before timestamptz NOT NULL, not_after timestamptz NOT NULL,
+  cert_pem text NOT NULL,
+  key_enc bytea NOT NULL,                                    -- private key encrypted (AES-256-GCM) with the server master key; never exported, never returned by API
+  status text NOT NULL CHECK (status IN ('active','retired','revoked')) DEFAULT 'active',
+  created_by uuid REFERENCES app_user(id), created_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE UNIQUE INDEX one_active_cert ON signing_certificate(company_id) WHERE status='active';
+
 CREATE TABLE password_history ( user_id uuid REFERENCES app_user(id) ON DELETE CASCADE, password_hash text NOT NULL, set_at timestamptz NOT NULL DEFAULT now() );  -- reuse check (last N)
 CREATE TABLE role (
   key text PRIMARY KEY,                            -- inspector, supervisor, qm, engineering, production, management, sysadmin, developer
