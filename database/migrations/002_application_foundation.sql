@@ -14,6 +14,12 @@ DECLARE rid uuid; st text;
 BEGIN
   IF TG_TABLE_NAME='template_revision' THEN
     rid := OLD.id;
+  ELSIF TG_TABLE_NAME='template_section' THEN
+    IF TG_OP='DELETE' THEN
+      SELECT revision_id INTO rid FROM template_stage WHERE id=OLD.stage_id;
+    ELSE
+      SELECT revision_id INTO rid FROM template_stage WHERE id=NEW.stage_id;
+    END IF;
   ELSIF TG_OP='DELETE' THEN
     rid := OLD.revision_id;
   ELSE
