@@ -14,9 +14,10 @@ DECLARE rid uuid; st text;
 BEGIN
   rid := CASE WHEN TG_TABLE_NAME='template_revision' THEN OLD.id ELSE COALESCE(NEW.revision_id,OLD.revision_id) END;
   SELECT status INTO st FROM template_revision WHERE id=rid;
-  IF st='published' AND TG_TABLE_NAME='template_revision' AND TG_OP='UPDATE'
-     AND OLD.status='published' AND NEW.status='superseded'
-     AND (to_jsonb(NEW)-'status' = to_jsonb(OLD)-'status') THEN RETURN NEW; END IF;
+  IF TG_TABLE_NAME='template_revision' AND TG_OP='UPDATE' THEN
+    IF st='published' AND OLD.status='published' AND NEW.status='superseded'
+       AND (to_jsonb(NEW)-'status' = to_jsonb(OLD)-'status') THEN RETURN NEW; END IF;
+  END IF;
   IF st IN ('published','superseded') THEN RAISE EXCEPTION 'Revision is %, structure is immutable', st; END IF;
   RETURN COALESCE(NEW,OLD);
 END $$;
