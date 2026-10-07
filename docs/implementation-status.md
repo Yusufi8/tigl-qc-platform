@@ -30,9 +30,9 @@ Completed. See [`audit/phase-0-project-audit.md`](audit/phase-0-project-audit.md
 - GitHub Actions run [37424871869](https://github.com/Yusufi8/tigl-qc-platform/actions/runs/37424871869) completed successfully on the published feature branch: `npm ci`, all 26 tests, TypeScript checking, and clean PostgreSQL 16 schema application passed.
 - Local PostgreSQL execution remains unavailable in this environment; the CI PostgreSQL 16 result is the authoritative schema execution check.
 
-## Not implemented yet
+## Remaining Phase 1 work
 
-No production authentication or RBAC service, API, inspection implementation, database migration runner, evidence service, signing/PDF workflow, Odoo integration, production deployment, or complete UAT suite is present. The clickable UI is a local-only UX prototype and is not wired to the validation package or a server. Do not deploy this repository as a production QC system.
+Evidence capture/storage and scanning, TOTP, user administration UI, full supervisor review UI, audit-chain verification integration, the complete API-backed mobile checklist, browser camera support, Redis/BullMQ jobs, and Playwright desktop/tablet/mobile E2E coverage remain. Compose/Docker and PostgreSQL execution are not verified in the current environment. Do not deploy this repository as a production QC system until the exit criteria pass.
 
 ## Next phases
 
@@ -41,3 +41,13 @@ No production authentication or RBAC service, API, inspection implementation, da
 3. Implement server foundation: config, health/readiness, local authentication, sessions, RBAC guards, audit writes and migrations.
 4. Implement template/revision persistence and seed import, then call this engine from the API as the authoritative evaluator.
 5. Connect the validated inspection UX to the server, then implement evidence, review/approval, signed reporting, NCR and Odoo in the order set by the project roadmap.
+
+## Application foundation work in progress — 6 October 2026
+
+- Added `apps/web`, `apps/api`, and `apps/worker` directories and Dockerfiles, a local Compose stack, Caddy routing, and `.env.example`.
+- Added managed SQL migrations: the original PostgreSQL schema as migration 001, plus sessions, audit extensions, RBAC seed/guardrails, published-revision immutability, and workflow-state extensions in migration 002.
+- Added an AXIS seed importer and a one-time local administrator bootstrap command.
+- Implemented API endpoints for local sign-in, password change, logout, current user, administrator provisioning/reset/revoke, AXIS revision lookup, inspection creation, result evaluation, value recording, and submission. The API recomputes results with the shared engine.
+- Added a responsive Next.js shell and sign-in view.
+- Verified 28 tests passed and TypeScript typecheck; the three PostgreSQL RBAC tests skip without a configured database. Next.js production build succeeded.
+- Docker/PostgreSQL execution was not available in the current environment. No database migration, API integration, RBAC integration, E2E, evidence, or end-to-end inspection run has yet been verified. Phase 1 remains in progress.
