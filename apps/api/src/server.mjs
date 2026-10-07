@@ -31,7 +31,7 @@ async function audit(client, userId, action, entity, entityId, req, before = nul
   const secret = process.env.AUDIT_HMAC_SECRET;
   if (!secret) throw new Error('AUDIT_HMAC_SECRET is required');
   const digest = createHmac('sha256', secret).update(data).digest('hex');
-  await client.query("INSERT INTO audit_event(user_id,actor_user_id,action,entity,entity_id,request_id,before_data,after_data,before,after,previous_hash,prev_hash,event_hash,row_hash,via) VALUES($1,$1,$2,$3,$4,$5,$6,$7,$6,$7,$8,$8,$9,$9,'web')", [userId, action, entity, entityId, req.requestId, before, after, previous || null, digest]);
+  await client.query("INSERT INTO audit_event(user_id,actor_user_id,action,entity,entity_id,request_id,before_data,after_data,before,after,previous_hash,prev_hash,event_hash,row_hash,via) VALUES($1,$1,$2,$3,$4,$5,$6,$7,$6,$7,$8::text,$8::text,$9::text,$9::text,'web')", [userId, action, entity, entityId, req.requestId, before, after, previous || null, digest]);
 }
 function sessionCookie(token, maxAge) { return `${cookieName}=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${maxAge}${process.env.COOKIE_SECURE === 'false' ? '' : '; Secure'}`; }
 async function authenticate(req, res, next) {
