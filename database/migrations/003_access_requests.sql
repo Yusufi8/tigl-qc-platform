@@ -1,0 +1,28 @@
+CREATE TABLE access_request (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  full_name text NOT NULL,
+  department text NOT NULL,
+  access_reason text NOT NULL,
+  username citext NOT NULL,
+  company_id text NOT NULL REFERENCES company(id),
+  office_email citext,
+  mobile text,
+  verification_channel text NOT NULL CHECK (verification_channel IN ('email','sms')),
+  password_hash text,
+  request_ip inet,
+  otp_hash text NOT NULL,
+  otp_expires_at timestamptz NOT NULL,
+  otp_last_sent_at timestamptz NOT NULL DEFAULT now(),
+  otp_attempts int NOT NULL DEFAULT 0,
+  otp_send_count int NOT NULL DEFAULT 1,
+  status text NOT NULL CHECK (status IN ('pending_verification','pending_review','approved','rejected','expired')) DEFAULT 'pending_verification',
+  requested_at timestamptz NOT NULL DEFAULT now(),
+  verified_at timestamptz,
+  reviewed_at timestamptz,
+  reviewed_by uuid REFERENCES app_user(id),
+  assigned_role text REFERENCES role(key),
+  review_note text,
+  created_user_id uuid REFERENCES app_user(id),
+  CHECK ((verification_channel='email' AND office_email IS NOT NULL) OR (verification_channel='sms' AND mobile IS NOT NULL))
+);
+CREATE INDEX access_request_pending ON access_request(status,requested_at) WHERE status IN ('pending_verification','pending_review');

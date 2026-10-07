@@ -5,9 +5,10 @@ import argon2 from 'argon2';
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { AppModule } from './app.module.mjs';
-import { randomBytes, createHash, createHmac, randomUUID } from 'node:crypto';
+import { randomBytes, randomInt, createHash, createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
 import { evalParam, parseDecimal, summarize } from '../../../packages/engine/src/index.ts';
 import { evaluateInspection } from './server-evaluator.mjs';
+import { deliverAccessCode } from './otp-delivery.mjs';
 
 const { Pool } = pg;
 const app = express();
@@ -57,6 +58,10 @@ function requirePermission(permission) { return async (req, res, next) => { try 
     const scope=await pool.query('SELECT company_id FROM inspection WHERE id=$1 AND company_id=ANY($2)',[req.params.id,req.user.companies]);
     if(!scope.rowCount)return res.status(404).json({error:'NOT_FOUND'});companyId=scope.rows[0].company_id;
   }
+  if(req.params.id&&req.path.startsWith('/api/v1/admin/access-requests/')){
+    const scope=await pool.query('SELECT company_id FROM access_request WHERE id=$1 AND company_id=ANY($2)',[req.params.id,req.user.companies]);
+    if(!scope.rowCount)return res.status(404).json({error:'NOT_FOUND'});companyId=scope.rows[0].company_id;
+  }
   if(!companyId||!req.user.companies.includes(companyId))return res.status(403).json({error:'FORBIDDEN',permission});
   const allowed=await pool.query('SELECT 1 FROM user_company_role u JOIN role_permission rp ON rp.role_key=u.role_key WHERE u.user_id=$1 AND u.company_id=$2 AND rp.perm_key=$3',[req.user.id,companyId,permission]);
   return allowed.rowCount?next():res.status(403).json({error:'FORBIDDEN',permission});
@@ -97,6 +102,109 @@ app.post('/api/v1/auth/password',authenticate,async (req,res,next) => {
 });
 app.post('/api/v1/auth/logout',authenticate,async(req,res,next)=>{try{const token=parseCookies(req.headers.cookie)[cookieName];const c=await pool.connect();try{await c.query('BEGIN');await c.query('UPDATE app_session SET revoked_at=now() WHERE token_hash=$1',[hashToken(token)]);await audit(c,req.user.id,'auth.logout','app_session',req.user.session_id,req);await c.query('COMMIT')}finally{c.release()}res.set('Set-Cookie',sessionCookie('',0));res.json({ok:true})}catch(e){next(e)}});
 app.get('/api/v1/auth/me',authenticate,(req,res)=>res.json({id:req.user.id,username:req.user.username,name:req.user.full_name,roles:req.user.roles,permissions:req.user.permissions,companies:req.user.companies,defaultSiteId:req.user.default_site_id,defaultCompanyId:req.user.default_company_id}));
+app.post('/api/v1/access-requests',async(req,res,next)=>{
+  const fullName=String(req.body?.fullName||'').trim();
+  const department=String(req.body?.department||'').trim();
+  const accessReason=String(req.body?.accessReason||'').trim();
+  const username=String(req.body?.username||'').trim().toLowerCase();
+  const companyId=String(req.body?.companyId||'');
+  const channel=String(req.body?.channel||'email');
+  const email=channel==='email'?String(req.body?.email||'').trim().toLowerCase()||null:null;
+  const mobile=channel==='sms'?String(req.body?.mobile||'').replace(/[\s()-]/g,'')||null:null;
+  const password=String(req.body?.password||'');
+  const destination=channel==='email'?email:mobile;
+  if(!fullName||fullName.length>120||!department||department.length>120||!accessReason||accessReason.length>500||!/^[a-z][a-z0-9._-]{2,31}$/.test(username)||password.length<12||!['TIGL','TIPL'].includes(companyId)||!['email','sms'].includes(channel)||!destination) return res.status(400).json({error:'INVALID_REQUEST'});
+  if(channel==='email'&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return res.status(400).json({error:'INVALID_OFFICE_EMAIL'});
+  if(channel==='sms'&&!/^\+[1-9]\d{7,14}$/.test(mobile))return res.status(400).json({error:'MOBILE_MUST_USE_E164'});
+  const domainAllowlist=String(process.env.OTP_ALLOWED_EMAIL_DOMAINS||'').split(',').map(x=>x.trim().toLowerCase()).filter(Boolean);
+  if(channel==='email'&&!domainAllowlist.length)return res.status(503).json({error:'OFFICE_EMAIL_DOMAIN_POLICY_MISSING'});
+  if(channel==='email'&&!domainAllowlist.includes(email.split('@')[1]))return res.status(400).json({error:'OFFICE_EMAIL_DOMAIN_REQUIRED'});
+  const signingSecret=process.env.OTP_HMAC_SECRET||process.env.AUDIT_HMAC_SECRET;
+  if(!signingSecret)return res.status(503).json({error:'OTP_CONFIGURATION_MISSING'});
+  const client=await pool.connect();let requestId,code;
+  try{
+    await client.query('BEGIN');
+    const limited=await client.query("SELECT count(*)::int AS n FROM access_request WHERE request_ip=$1 AND requested_at>now()-interval '1 hour'",[req.ip]);
+    if(limited.rows[0].n>=5){await client.query('ROLLBACK');return res.status(429).json({error:'REQUEST_RATE_LIMITED'})}
+    await client.query("UPDATE access_request SET status='expired',otp_hash='',password_hash=NULL WHERE username=$1 AND status='pending_verification' AND otp_expires_at<=now()",[username]);
+    const duplicate=await client.query("SELECT 1 FROM app_user WHERE username=$1 UNION ALL SELECT 1 FROM access_request WHERE username=$1 AND (status='pending_review' OR (status='pending_verification' AND otp_expires_at>now())) LIMIT 1",[username]);
+    if(duplicate.rowCount){await client.query('ROLLBACK');return res.status(409).json({error:'USERNAME_UNAVAILABLE'})}
+    const contactCount=await client.query("SELECT count(*)::int AS n FROM access_request WHERE requested_at>now()-interval '1 hour' AND (($1='email' AND office_email=$2) OR ($1='sms' AND mobile=$3))",[channel,email,mobile]);
+    if(contactCount.rows[0].n>=3){await client.query('ROLLBACK');return res.status(429).json({error:'CONTACT_RATE_LIMITED'})}
+    requestId=randomUUID();code=String(randomInt(100000,1000000));
+    const otpHash=createHmac('sha256',signingSecret).update(`${requestId}.${code}`).digest('hex');
+    const passwordHash=await argon2.hash(password,{type:argon2.argon2id,memoryCost:19456,timeCost:2,parallelism:1});
+    await client.query(`INSERT INTO access_request(id,full_name,department,access_reason,username,company_id,office_email,mobile,verification_channel,password_hash,request_ip,otp_hash,otp_expires_at)
+      VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,now()+interval '10 minutes')`,[requestId,fullName,department,accessReason,username,companyId,email,mobile,channel,passwordHash,req.ip,otpHash]);
+    await audit(client,null,'access_request.created','access_request',requestId,req,null,{username,companyId,channel,department});
+    await client.query('COMMIT');
+  }catch(err){await client.query('ROLLBACK').catch(()=>{});return next(err)}finally{client.release()}
+  try{await deliverAccessCode(channel,destination,code);return res.status(202).json({requestId,expiresInSeconds:600})}
+  catch(err){await pool.query("UPDATE access_request SET status='expired',otp_hash='',password_hash=NULL WHERE id=$1",[requestId]).catch(()=>{});return res.status(503).json({error:err.code||'OTP_DELIVERY_UNAVAILABLE'})}
+});
+app.post('/api/v1/access-requests/:id/verify',async(req,res,next)=>{
+  const client=await pool.connect();
+  try{
+    await client.query('BEGIN');
+    const found=await client.query('SELECT id,otp_hash,otp_expires_at,otp_attempts,status FROM access_request WHERE id=$1 FOR UPDATE',[req.params.id]);
+    const row=found.rows[0];
+    if(!row||row.status!=='pending_verification'||new Date(row.otp_expires_at)<=new Date()||row.otp_attempts>=5){if(row?.status==='pending_verification')await client.query("UPDATE access_request SET status='expired',otp_hash='',password_hash=NULL WHERE id=$1",[row.id]);await client.query('COMMIT');return res.status(400).json({error:'CODE_EXPIRED_OR_INVALID'})}
+    const code=String(req.body?.code||'');
+    const expected=Buffer.from(row.otp_hash,'hex');
+    const actual=Buffer.from(createHmac('sha256',process.env.OTP_HMAC_SECRET||process.env.AUDIT_HMAC_SECRET||'').update(`${row.id}.${code}`).digest('hex'),'hex');
+    if(!/^\d{6}$/.test(code)||expected.length!==actual.length||!timingSafeEqual(expected,actual)){
+      const attempts=row.otp_attempts+1;await client.query("UPDATE access_request SET otp_attempts=$2,status=CASE WHEN $2>=5 THEN 'expired' ELSE status END,otp_hash=CASE WHEN $2>=5 THEN '' ELSE otp_hash END,password_hash=CASE WHEN $2>=5 THEN NULL ELSE password_hash END WHERE id=$1",[row.id,attempts]);
+      await audit(client,null,'access_request.verification_failed','access_request',row.id,req,null,{attempts});await client.query('COMMIT');return res.status(400).json({error:'CODE_EXPIRED_OR_INVALID',attemptsRemaining:Math.max(0,5-attempts)});
+    }
+    await client.query("UPDATE access_request SET status='pending_review',verified_at=now(),otp_hash='' WHERE id=$1",[row.id]);
+    await audit(client,null,'access_request.contact_verified','access_request',row.id,req,{status:'pending_verification'},{status:'pending_review'});
+    await client.query('COMMIT');res.json({status:'pending_review',message:'Contact verified. IT must review the request and assign access.'});
+  }catch(err){await client.query('ROLLBACK').catch(()=>{});next(err)}finally{client.release()}
+});
+app.post('/api/v1/access-requests/:id/resend-code',async(req,res,next)=>{
+  const client=await pool.connect();let row,code;
+  try{
+    await client.query('BEGIN');
+    const found=await client.query("SELECT id,verification_channel,office_email,mobile,otp_send_count,otp_attempts,otp_last_sent_at FROM access_request WHERE id=$1 AND status='pending_verification' FOR UPDATE",[req.params.id]);row=found.rows[0];
+    if(!row){await client.query('ROLLBACK');return res.status(404).json({error:'REQUEST_NOT_FOUND'})}
+    if(row.otp_send_count>=3||row.otp_attempts>=5){await client.query('ROLLBACK');return res.status(429).json({error:'OTP_LIMIT_REACHED'})}
+    if(Date.now()-new Date(row.otp_last_sent_at).getTime()<60000){await client.query('ROLLBACK');return res.status(429).json({error:'OTP_RESEND_TOO_SOON'})}
+    const signingSecret=process.env.OTP_HMAC_SECRET||process.env.AUDIT_HMAC_SECRET;if(!signingSecret){await client.query('ROLLBACK');return res.status(503).json({error:'OTP_CONFIGURATION_MISSING'})}
+    code=String(randomInt(100000,1000000));const otpHash=createHmac('sha256',signingSecret).update(`${row.id}.${code}`).digest('hex');
+    await client.query("UPDATE access_request SET otp_hash=$2,otp_expires_at=now()+interval '10 minutes',otp_last_sent_at=now(),otp_send_count=otp_send_count+1,otp_attempts=0 WHERE id=$1",[row.id,otpHash]);
+    await audit(client,null,'access_request.code_resent','access_request',row.id,req,null,{channel:row.verification_channel,sends:row.otp_send_count+1});await client.query('COMMIT');
+  }catch(err){await client.query('ROLLBACK').catch(()=>{});return next(err)}finally{client.release()}
+  try{await deliverAccessCode(row.verification_channel,row.verification_channel==='email'?row.office_email:row.mobile,code);res.json({expiresInSeconds:600})}
+  catch(err){await pool.query("UPDATE access_request SET status='expired',otp_hash='',password_hash=NULL WHERE id=$1",[row.id]).catch(()=>{});res.status(503).json({error:err.code||'OTP_DELIVERY_UNAVAILABLE'})}
+});
+app.get('/api/v1/access-requests/:id',async(req,res,next)=>{try{const out=await pool.query('SELECT status,username,assigned_role FROM access_request WHERE id=$1',[req.params.id]);if(!out.rowCount)return res.status(404).json({error:'REQUEST_NOT_FOUND'});res.json(out.rows[0])}catch(err){next(err)}});
+app.get('/api/v1/admin/access-requests',authenticate,requirePermission('admin.users'),async(req,res,next)=>{try{const out=await pool.query("SELECT id,full_name,department,access_reason,username,company_id,office_email,mobile,verification_channel,requested_at,verified_at,status FROM access_request WHERE status='pending_review' AND company_id=$1 ORDER BY verified_at",[req.user.default_company_id]);res.json(out.rows)}catch(err){next(err)}});
+app.post('/api/v1/admin/access-requests/:id/review',authenticate,requirePermission('admin.users'),async(req,res,next)=>{
+  const {decision,roleKey,siteId,note}=req.body||{};
+  if(!['approve','reject'].includes(decision))return res.status(400).json({error:'INVALID_DECISION'});
+  if(decision==='approve'&&(!roleKey||!siteId))return res.status(400).json({error:'ROLE_AND_SITE_REQUIRED'});
+  if(decision==='approve'&&['qm','sysadmin','developer'].includes(roleKey))return res.status(403).json({error:'ROLE_REQUIRES_SEPARATE_AUTHORITY'});
+  const client=await pool.connect();
+  try{
+    await client.query('BEGIN');
+    const found=await client.query("SELECT * FROM access_request WHERE id=$1 AND status='pending_review' AND company_id=ANY($2) FOR UPDATE",[req.params.id,req.user.companies]);
+    const row=found.rows[0];if(!row){await client.query('ROLLBACK');return res.status(404).json({error:'REQUEST_NOT_FOUND'})}
+    if(decision==='reject'){
+      await client.query("UPDATE access_request SET status='rejected',reviewed_at=now(),reviewed_by=$2,review_note=$3,password_hash=NULL WHERE id=$1",[row.id,req.user.id,String(note||'').slice(0,500)]);
+      await audit(client,req.user.id,'access_request.rejected','access_request',row.id,req,{status:row.status},{status:'rejected',note:String(note||'').slice(0,500)});
+      await client.query('COMMIT');return res.json({status:'rejected'});
+    }
+    const role=await client.query("SELECT key FROM role WHERE key=$1 AND key NOT IN ('qm','sysadmin','developer')",[roleKey]);
+    const site=await client.query('SELECT id,company_id FROM site WHERE id=$1 AND company_id=$2',[siteId,row.company_id]);
+    if(!role.rowCount||!site.rowCount){await client.query('ROLLBACK');return res.status(400).json({error:'INVALID_ROLE_OR_SITE'})}
+    const created=await client.query(`INSERT INTO app_user(username,email,full_name,default_site_id,password_hash,must_change_password,created_by)
+      VALUES($1,$2,$3,$4,$5,false,$6) RETURNING id,username,full_name`,[row.username,row.office_email,row.full_name,siteId,row.password_hash,req.user.id]);
+    await client.query('INSERT INTO user_company_role(user_id,company_id,role_key) VALUES($1,$2,$3)',[created.rows[0].id,row.company_id,roleKey]);
+    await client.query("UPDATE access_request SET status='approved',reviewed_at=now(),reviewed_by=$2,assigned_role=$3,review_note=$4,created_user_id=$5,password_hash=NULL WHERE id=$1",[row.id,req.user.id,roleKey,String(note||'').slice(0,500),created.rows[0].id]);
+    await audit(client,req.user.id,'access_request.approved','access_request',row.id,req,{status:row.status},{status:'approved',userId:created.rows[0].id,username:row.username,companyId:row.company_id,roleKey,siteId});
+    await client.query('COMMIT');res.status(201).json({status:'approved',user:created.rows[0],roleKey});
+  }catch(err){await client.query('ROLLBACK').catch(()=>{});if(err.code==='23505')return res.status(409).json({error:'USERNAME_UNAVAILABLE'});next(err)}finally{client.release()}
+});
 app.post('/api/v1/admin/users',authenticate,requirePermission('admin.users'),async(req,res,next)=>{const {username,password,fullName,companyId,roleKey}=req.body||{};
   if(!/^[a-z][a-z0-9._-]{2,31}$/.test(String(username||''))||String(password||'').length<12||!fullName||!req.user.companies.includes(companyId)||!roleKey)return res.status(400).json({error:'INVALID_USER'});
   const c=await pool.connect();try{await c.query('BEGIN');const role=await c.query('SELECT key FROM role WHERE key=$1',[roleKey]);if(!role.rowCount){await c.query('ROLLBACK');return res.status(400).json({error:'UNKNOWN_ROLE'})}

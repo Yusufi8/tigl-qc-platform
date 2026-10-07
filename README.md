@@ -10,13 +10,15 @@ Requirements: Docker Compose v2 and a free TCP port 8080. From the repository ro
 cp .env.example .env
 ```
 
-Edit `.env` and replace every `replace-with...` value with a unique random secret. Set a private bootstrap username and password of at least 12 characters. Keep `.env` private. Then run:
+Edit `.env` and replace every `replace-with...` value with a unique random secret. Set a private bootstrap username and password of at least 12 characters, configure the approved company email domains, and set the company email/SMS delivery webhook URLs for OTP. Keep `.env` private. The delivery webhook receives JSON `{ channel, to, code, purpose, expiresInMinutes }` and should return a 2xx response only after accepting the message. `OTP_DELIVERY_TOKEN` is sent as a bearer token when set. Then run:
 
 ```sh
 docker compose -f infra/docker-compose.yml up --build
 ```
 
 Open [http://localhost:8080](http://localhost:8080). Startup applies database migrations, imports AXIS-MM and AXIS-TMH, and creates a local System Administrator with the bootstrap values. The administrator does not receive QC approval or template publishing authority. Local Compose uses HTTP-only cookies for localhost; set `COOKIE_SECURE=true` behind TLS before company network use.
+
+Sign in with `BOOTSTRAP_USERNAME` and `BOOTSTRAP_PASSWORD` from your private `.env`; the example username is `qc.admin`, and there is no built-in password. On the sign-in screen, employees can request access using a company email or mobile number. The contact must be verified by OTP, then an IT System Administrator reviews the request and assigns a role and site. System Administrators cannot assign System Administrator, developer, or Quality Manager roles through this intake flow; those roles require separate authorization.
 
 To stop the stack, press Ctrl+C or run `docker compose -f infra/docker-compose.yml down`. Database, Redis, and evidence volumes remain. `down -v` removes them.
 
@@ -37,9 +39,9 @@ Database commands need `DATABASE_URL` and `psql`; the API also needs `AUDIT_HMAC
 
 ## Current implementation scope
 
-The API implements local Argon2id sign-in, first-login password changes, expiring HttpOnly sessions, lockout, administrator user creation/password reset/session revocation, company-scoped permission checks, published AXIS revision lookup, inspection header creation, value/remark recording, server-side evaluation, submission, supervisor workflow transitions, and QM decisions. Client-supplied PASS/FAIL values are ignored. The Next.js app provides a responsive shell and a parameter-by-parameter AXIS inspection flow connected to the API. The source packet remains available in [`TIGL-QC-Dev-Packet/`](TIGL-QC-Dev-Packet/); the earlier standalone UX preview remains a prototype.
+The API implements local Argon2id sign-in, first-login password changes, expiring HttpOnly sessions, lockout, OTP-verified employee access requests, administrator review and role/site assignment, password reset/session revocation, company-scoped permission checks, published AXIS revision lookup, inspection header creation, value/remark recording, server-side evaluation, submission, supervisor workflow transitions, and QM decisions. Client-supplied PASS/FAIL values are ignored. The Next.js app provides a responsive shell, a parameter-by-parameter AXIS inspection flow, employee access request screens, and an administrator review queue. OTP delivery uses configured company webhook endpoints; email requests require an allowlisted domain. The source packet remains available in [`TIGL-QC-Dev-Packet/`](TIGL-QC-Dev-Packet/); the earlier standalone UX preview remains a prototype.
 
-This is an early implementation slice, not the Phase 1 exit build. Evidence upload and malware scanning, supervisor review screens, TOTP, an HTTP audit-chain verification endpoint, Redis/BullMQ processors, PDF output, and Playwright desktop/tablet/mobile E2E suites remain. The worker container is a readiness process without queue processors. Docker and PostgreSQL were unavailable in the current environment, so migrations, Compose startup, and API database flows have not been run here. Do not use this build for production QC decisions until those workflows and tests are complete.
+This is an early implementation slice, not the Phase 1 exit build. Evidence upload and malware scanning, full supervisor review screens, TOTP, an HTTP audit-chain verification endpoint, Redis/BullMQ processors, PDF output, and Playwright desktop/tablet/mobile E2E suites remain. The worker container is a readiness process without queue processors. Docker is unavailable in the current environment; the PostgreSQL integration workflow runs in GitHub CI. Real OTP delivery requires the company webhook endpoints and office domain policy to be configured in `.env`. Do not use this build for production QC decisions until the remaining workflows and tests are complete.
 
 See [`docs/api-foundation.md`](docs/api-foundation.md) for the route list.
 

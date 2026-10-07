@@ -9,6 +9,12 @@ All routes are served under `/api/v1`. Successful JSON responses use the shared 
 | POST | `/auth/password` | Set a first-login or reset password (minimum 12 characters) |
 | POST | `/auth/logout` | Revoke the current session |
 | GET | `/auth/me` | Current user, default company, roles, and permissions |
+| POST | `/access-requests` | Public; request an account and send a short-lived OTP to an approved office email/mobile delivery provider |
+| POST | `/access-requests/:id/verify` | Public; verify the contact and move request to the administrator queue |
+| POST | `/access-requests/:id/resend-code` | Public; resend with one-minute cooldown and send/attempt limits |
+| GET | `/access-requests/:id` | Public; check status using the unguessable request ID |
+| GET | `/admin/access-requests` | `admin.users`; list verified requests for the administrator's default company |
+| POST | `/admin/access-requests/:id/review` | `admin.users`; approve with an assigned role/site or reject; QM/system administrator/developer roles are excluded from this intake |
 | POST | `/admin/users` | `admin.users`; create IT-issued local account and role |
 | POST | `/admin/users/:id/reset-password` | `admin.users`; reset password and revoke sessions |
 | DELETE | `/admin/users/:id/sessions` | `admin.users`; revoke active sessions |
