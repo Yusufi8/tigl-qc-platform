@@ -2,7 +2,13 @@ const providerUrl = (channel) => process.env[channel === 'email' ? 'OTP_EMAIL_DE
 
 export async function deliverAccessCode(channel, destination, code) {
   const url = providerUrl(channel);
-  if (!url) throw Object.assign(new Error(`OTP ${channel} delivery is not configured`), { code: 'OTP_DELIVERY_UNAVAILABLE' });
+  if (!url) {
+    if (['development', 'local'].includes(process.env.NODE_ENV)) {
+      console.info(`[DEVELOPMENT OTP - LOCAL ONLY] ${channel} verification code: ${code} (expires in 10 minutes)`);
+      return;
+    }
+    throw Object.assign(new Error(`OTP ${channel} delivery is not configured`), { code: 'OTP_DELIVERY_UNAVAILABLE' });
+  }
   const response = await fetch(url, {
     method: 'POST',
     headers: {

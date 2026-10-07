@@ -1,6 +1,7 @@
 import pg from 'pg';
 import argon2 from 'argon2';
-const {Pool}=pg;const pool=new Pool({connectionString:process.env.DATABASE_URL});
+import { getDatabaseUrl } from './connection.mjs';
+const {Pool}=pg;const pool=new Pool({connectionString:getDatabaseUrl()});
 const username=String(process.env.BOOTSTRAP_USERNAME||'').trim().toLowerCase();
 const password=String(process.env.BOOTSTRAP_PASSWORD||'');
 const siteName=String(process.env.BOOTSTRAP_SITE_NAME||'').trim();

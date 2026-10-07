@@ -2,9 +2,10 @@ import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import pg from 'pg';
+import { getDatabaseUrl } from './connection.mjs';
 const root=dirname(fileURLToPath(import.meta.url));
 const data=JSON.parse(await readFile(resolve(root,'../TIGL-QC-Dev-Packet/seed/axis_templates.json'),'utf8'));
-const pool=new pg.Pool({connectionString:process.env.DATABASE_URL});
+const pool=new pg.Pool({connectionString:getDatabaseUrl()});
 try { for(const t of data.templates){
   const c=await pool.connect();
   try { await c.query('BEGIN');

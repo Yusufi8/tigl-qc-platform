@@ -9,10 +9,11 @@ import { randomBytes, randomInt, createHash, createHmac, randomUUID, timingSafeE
 import { evalParam, parseDecimal, summarize } from '../../../packages/engine/src/index.ts';
 import { evaluateInspection } from './server-evaluator.mjs';
 import { deliverAccessCode } from './otp-delivery.mjs';
+import { getDatabaseUrl } from '../../../database/connection.mjs';
 
 const { Pool } = pg;
 const app = express();
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const pool = new Pool({ connectionString: getDatabaseUrl() });
 const cookieName = 'tigl_qc_session';
 const ttlHours = Number(process.env.SESSION_TTL_HOURS || 8);
 app.disable('x-powered-by');

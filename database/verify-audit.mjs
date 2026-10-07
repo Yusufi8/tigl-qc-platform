@@ -1,7 +1,8 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import pg from 'pg';
+import { getDatabaseUrl } from './connection.mjs';
 const secret=process.env.AUDIT_HMAC_SECRET;if(!secret)throw new Error('AUDIT_HMAC_SECRET is required');
-const pool=new pg.Pool({connectionString:process.env.DATABASE_URL});
+const pool=new pg.Pool({connectionString:getDatabaseUrl()});
 const stable=(v)=>Array.isArray(v)?v.map(stable):v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map(k=>[k,stable(v[k])])):v;
 let previous='';let checked=0;let legacy=0;let ok=true;
 try{const rows=await pool.query('SELECT id,user_id,actor_user_id,action,entity,entity_id,request_id,before_data,after_data,before,after,previous_hash,prev_hash,event_hash,row_hash FROM audit_event ORDER BY id');
