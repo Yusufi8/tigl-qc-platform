@@ -9,12 +9,13 @@
   ],
   "scripts": {
     "preview": "node scripts/preview-server.mjs",
-    "api": "node apps/api/src/server.mjs",
+    "api": "node --experimental-strip-types --env-file-if-exists=.env scripts/start-api.mjs",
     "web": "npm --workspace @tigl-qc/web run dev",
-    "db:migrate": "node database/migrate.mjs",
-    "db:seed": "node database/seed-axis.mjs",
-    "db:bootstrap-admin": "node database/bootstrap-admin.mjs",
-    "db:audit:verify": "node database/verify-audit.mjs",
+    "db:migrate": "node --env-file-if-exists=.env database/migrate.mjs",
+    "db:seed": "node --env-file-if-exists=.env database/seed-axis.mjs",
+    "db:bootstrap-admin": "node --env-file-if-exists=.env database/bootstrap-admin.mjs",
+    "db:audit:verify": "node --env-file-if-exists=.env database/verify-audit.mjs",
+    "build": "npm --workspace @tigl-qc/web run build",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "test:engine": "vitest run packages/engine/test"
